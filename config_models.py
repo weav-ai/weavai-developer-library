@@ -31,6 +31,7 @@ class EnvTypes(str, Enum):
 
 class ServiceType(str, Enum):
     WORKFLOWS = "workflows"
+    AGENT = "agent"
 
 
 class ConfigModel(BaseModel):
@@ -50,8 +51,10 @@ class BaseURLMapper:
         self.url_mapping = {
             EnvTypes.LOCAL: {
                 ServiceType.WORKFLOWS: "http://localhost:7036",
+                ServiceType.AGENT: "http://localhost:7031",
             },
             EnvTypes.OTHER: {
+                ServiceType.AGENT: "/agent-prototype",
                 ServiceType.WORKFLOWS: "/workflow-service",
             },
         }
@@ -105,3 +108,7 @@ class ServiceEndpoints:
         self.RERUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/re_run"
         self.RUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/run"
         self.WORKFLOW_STATUS = "/workflows/{WORKFLOW_ID}/{WORKFLOW_RUN_ID}/status"
+        self.GET_AGENT_TYPES = "agent/types"
+        self.GET_AGENT_RESPONSE = "agent"
+        self.GET_CHAT_HISTORY = "agent/chat_history?chat_id={CHAT_ID}"
+        self.DELETE_CHAT_HISTORY = "agent/delete/chat"
