@@ -27,9 +27,7 @@ if __name__ == "__main__":
         "--user_input", type=str, required=True, help="User input text."
     )
     parser.add_argument("--chat_id", type=str, required=True, help="Chat ID.")
-    parser.add_argument(
-        "--stream", choices=BOOL_CHOICES, type=str, default="False", help="Stream flag."
-    )
+
     parser.add_argument("--agent_type", type=str, required=True, help="Agent type.")
 
     args = parser.parse_args()
@@ -39,7 +37,7 @@ if __name__ == "__main__":
     body = GetAgentRequest(
         user_input=args.user_input,
         chat_id=args.chat_id,
-        stream=get_bool_value(args.stream),
+        stream=False,
         agent_type=args.agent_type,
     )
     agent_response = agent_service.get_agent_response(get_agent_request_body=body)

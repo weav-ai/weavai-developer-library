@@ -37,20 +37,13 @@ if __name__ == "__main__":
         help="Skip the first N messages",
     )
 
-    parser.add_argument(
-        "--stream",
-        type=str,
-        choices=BOOL_CHOICES,
-        default="false",
-        help="Should the response be streamed",
-    )
     args = parser.parse_args()
 
     body = ChatRequest(
         user_input=args.user_input,
         file_id=args.file_id,
         chat_id=args.chat_id,
-        stream=get_bool_value(args.stream),
+        stream=False,
     )
 
     chat_response = chat_service.chat(chat_request=body)
