@@ -32,6 +32,7 @@ class EnvTypes(str, Enum):
 class ServiceType(str, Enum):
     WORKFLOWS = "workflows"
     AGENT = "agent"
+    CHATS = "chats"
 
 
 class ConfigModel(BaseModel):
@@ -52,10 +53,12 @@ class BaseURLMapper:
             EnvTypes.LOCAL: {
                 ServiceType.WORKFLOWS: "http://localhost:7036",
                 ServiceType.AGENT: "http://localhost:7031",
+                ServiceType.CHATS: "http://localhost:7030",
             },
             EnvTypes.OTHER: {
                 ServiceType.AGENT: "/agent-prototype",
                 ServiceType.WORKFLOWS: "/workflow-service",
+                ServiceType.CHATS: "/chat-service",
             },
         }
 
@@ -112,3 +115,6 @@ class ServiceEndpoints:
         self.GET_AGENT_RESPONSE = "agent"
         self.GET_CHAT_HISTORY = "agent/chat_history?chat_id={CHAT_ID}"
         self.DELETE_CHAT_HISTORY = "agent/delete/chat"
+        self.CHAT_LOGS = "/chat_logs/"
+        self.CHAT_HISTORY = "/chat_history"
+        self.CHAT = "/chat"
