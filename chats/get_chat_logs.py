@@ -1,5 +1,3 @@
-# python3 chats/get_chat_logs.py
-
 import sys
 import os
 import argparse

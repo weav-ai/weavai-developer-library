@@ -33,6 +33,7 @@ class ServiceType(str, Enum):
     WORKFLOWS = "workflows"
     AGENT = "agent"
     CHATS = "chats"
+    DOCUMENT = "document"
 
 
 class ConfigModel(BaseModel):
@@ -54,11 +55,13 @@ class BaseURLMapper:
                 ServiceType.WORKFLOWS: "http://localhost:7036",
                 ServiceType.AGENT: "http://localhost:7031",
                 ServiceType.CHATS: "http://localhost:7030",
+                ServiceType.DOCUMENT: "http://localhost:7015",
             },
             EnvTypes.OTHER: {
                 ServiceType.AGENT: "/agent-prototype",
                 ServiceType.WORKFLOWS: "/workflow-service",
                 ServiceType.CHATS: "/chat-service",
+                ServiceType.DOCUMENT: "/file-service",
             },
         }
 
@@ -118,3 +121,11 @@ class ServiceEndpoints:
         self.CHAT_LOGS = "/chat_logs/"
         self.CHAT_HISTORY = "/chat_history"
         self.CHAT = "/chat"
+        self.CREATE_FORM = "forms"
+        self.FILTER_FORM = "forms/"
+        self.EXECUTE_FORM_ANALYTICS = "forms/{FORM_ID}/analytics/"
+        self.FILTER_FORM_INSTANCES = "forms/instances/"
+        self.GET_FORM_DEFINITON = "forms/{FORM_ID}"
+        self.UPDATE_FORM_DEFINITON = "/forms/{FORM_ID}"
+        self.DELETE_FORM_DEFINITON = "/forms/{FORM_ID}"
+        self.DOWNLOAD_QUERY_RESULT = "/forms/{FORM_ID}/analytics/download"
