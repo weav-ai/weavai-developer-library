@@ -1,3 +1,5 @@
+# python3 documents/forms/download_query_result.py --form_id 66f45d0db1d0dfb13c9974c3 --query "Test query"
+
 import sys
 import os
 import argparse

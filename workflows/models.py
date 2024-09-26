@@ -33,7 +33,7 @@ class RunWorkflowResponse(BaseModel):
     workflow_id: str
     document_id: str
     document_name: str
-    in_folders: Optional[List[int]] = []
+    in_folders: Optional[List[str]] = []
     state: Optional[str]
     start_date: Optional[str]
     end_date: Optional[str]

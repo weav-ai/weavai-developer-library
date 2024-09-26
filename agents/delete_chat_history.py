@@ -1,3 +1,5 @@
+# python3 agents/delete_chat_history.py --chat_id "google-oauth2|117349365869611297391_Insurance Underwriting AI Agent"
+
 import sys
 import os
 import argparse

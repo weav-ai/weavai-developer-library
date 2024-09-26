@@ -32,7 +32,6 @@ class EnvTypes(str, Enum):
 class ServiceType(str, Enum):
     WORKFLOWS = "workflows"
     AGENT = "agent"
-    CHATS = "chats"
     DOCUMENT = "document"
 
 
@@ -54,13 +53,11 @@ class BaseURLMapper:
             EnvTypes.LOCAL: {
                 ServiceType.WORKFLOWS: "http://localhost:7036",
                 ServiceType.AGENT: "http://localhost:7031",
-                ServiceType.CHATS: "http://localhost:7030",
                 ServiceType.DOCUMENT: "http://localhost:7015",
             },
             EnvTypes.OTHER: {
                 ServiceType.AGENT: "/agent-prototype",
                 ServiceType.WORKFLOWS: "/workflow-service",
-                ServiceType.CHATS: "/chat-service",
                 ServiceType.DOCUMENT: "/file-service",
             },
         }
@@ -111,21 +108,18 @@ class ServiceEndpoints:
         self.GET_ALL_WORKFLOWS = "/workflows/?"
         self.GET_SINGLE_WORKFLOW = "/workflows/{WORKFLOW_NAME}"
         self.SKIP_TASK_IN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/skip_tasks"
-        self.RERUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/re_run"
+        self.RERUN_WORKFLOW = "workflows/{WORKFLOW_NAME}/re_run"
         self.RUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/run"
         self.WORKFLOW_STATUS = "/workflows/{WORKFLOW_ID}/{WORKFLOW_RUN_ID}/status"
         self.GET_AGENT_TYPES = "agent/types"
         self.GET_AGENT_RESPONSE = "agent"
         self.GET_CHAT_HISTORY = "agent/chat_history?chat_id={CHAT_ID}"
         self.DELETE_CHAT_HISTORY = "agent/delete/chat"
-        self.CHAT_LOGS = "/chat_logs/"
-        self.CHAT_HISTORY = "/chat_history"
-        self.CHAT = "/chat"
-        self.CREATE_FORM = "forms"
+        self.CREATE_FORM = "forms/"
         self.FILTER_FORM = "forms/"
         self.EXECUTE_FORM_ANALYTICS = "forms/{FORM_ID}/analytics/"
         self.FILTER_FORM_INSTANCES = "forms/instances/"
         self.GET_FORM_DEFINITON = "forms/{FORM_ID}"
         self.UPDATE_FORM_DEFINITON = "/forms/{FORM_ID}"
         self.DELETE_FORM_DEFINITON = "/forms/{FORM_ID}"
-        self.DOWNLOAD_QUERY_RESULT = "/forms/{FORM_ID}/analytics/download"
+        self.DOWNLOAD_QUERY_RESULT = "forms/{FORM_ID}/analytics/download"

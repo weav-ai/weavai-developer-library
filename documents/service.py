@@ -9,6 +9,7 @@ from documents.models import (
     GetFormDefinitonResponse,
     UpdateFormDefinitonRequest,
     DownloadQueryResultRequest,
+    ExecuteFormAnalyticsResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -46,19 +47,26 @@ class FormOperations:
                 message="Failed to create form",
                 response_data=response.json(),
             )
-        return CreateFormResponse.parse_obj(response.json())
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return CreateFormResponse.parse_obj(final_response)
 
     def filter_form(self, form_data: FilterFormRequest) -> FilterFormResponse:
         url = f"{self.configs.base_url}/{self.endpoints.FILTER_FORM}"
         params = [
-            ("query", urllib.parse.quote(form_data.query)),
+            ("query", form_data.query),
             ("scope", form_data.scope),
             ("is_searchable", form_data.is_searchable),
         ]
         filtered_params = [(k, v) for k, v in params if v is not None and v != ""]
+        query_string = "&".join(
+            [
+                f"{urllib.parse.quote(str(k))}={urllib.parse.quote(str(v))}"
+                for k, v in filtered_params
+            ]
+        )
         response = requests.get(
-            url=url,
-            params=filtered_params,
+            url=f"{url}?{query_string}",
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
         if response.status_code == 401:
@@ -84,13 +92,16 @@ class FormOperations:
 
     def execute_form_analytics(
         self, form_id: str, form_data: ExecuteFormAnalyticsRequest
-    ) -> CreateFormResponse:
+    ) -> ExecuteFormAnalyticsResponse:
         url = f"{self.configs.base_url}/{self.endpoints.EXECUTE_FORM_ANALYTICS.format(FORM_ID=form_id)}"
         final_data = {data[0]: data[1] for data in form_data if data[1]}
         response = requests.post(
             url=url,
             json=final_data,
-            headers={"Authorization": f"Bearer {self.configs.auth_token}"},
+            headers={
+                "Authorization": f"Bearer {self.configs.auth_token}",
+                "Content-Type": "application/json",
+            },
         )
         if response.status_code == 401:
             raise DocumentProcessingException(
@@ -110,8 +121,7 @@ class FormOperations:
                 message="Failed to execute form analytics",
                 response_data=response.json(),
             )
-        print(response.json())
-        # return CreateFormResponse.parse_obj(response.json())
+        return ExecuteFormAnalyticsResponse.parse_obj(response.json())
 
     def filter_form_instances(
         self, form_data: FilterFormInstanceRequest
@@ -120,8 +130,8 @@ class FormOperations:
         params = [
             ("scope", form_data.scope),
             ("status", form_data.status),
-            ("category", urllib.parse.quote(form_data.category)),
-            ("query", urllib.parse.quote(form_data.query)),
+            ("category", form_data.category),
+            ("query", form_data.query),
             ("form_id", form_data.form_id),
             ("doc_id", form_data.doc_id),
             ("only_latest", form_data.only_latest),
@@ -129,12 +139,17 @@ class FormOperations:
             ("limit", form_data.limit),
         ]
         filtered_params = [(k, v) for k, v in params if v is not None and v != ""]
+        query_string = "&".join(
+            [
+                f"{urllib.parse.quote(str(k))}={urllib.parse.quote(str(v))}"
+                for k, v in filtered_params
+            ]
+        )
+
         response = requests.get(
-            url=url,
-            params=filtered_params,
+            url=f"{url}?{query_string}",
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
-        print(response.url)
         if response.status_code == 401:
             raise DocumentProcessingException(
                 status_code=response.status_code,
@@ -179,7 +194,9 @@ class FormOperations:
                 message="Failed to get form definition",
                 response_data=response.json(),
             )
-        return GetFormDefinitonResponse.parse_obj(response.json())
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return GetFormDefinitonResponse.parse_obj(final_response)
 
     def update_form_definition(
         self, form_id: str, form_data: UpdateFormDefinitonRequest
@@ -208,7 +225,9 @@ class FormOperations:
                 message="Failed to update form instances",
                 response_data=response.json(),
             )
-        return GetFormDefinitonResponse.parse_obj(response.json())
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return GetFormDefinitonResponse.parse_obj(final_response)
 
     def delete_form_definition(self, form_id: str) -> GetFormDefinitonResponse:
         url = f"{self.configs.base_url}/{self.endpoints.DELETE_FORM_DEFINITON.format(FORM_ID=form_id)}"
@@ -228,7 +247,9 @@ class FormOperations:
                 message="Failed to delete form definition",
                 response_data=response.json(),
             )
-        return GetFormDefinitonResponse.parse_obj(response.json())
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return GetFormDefinitonResponse.parse_obj(final_response)
 
     def download_query_result(
         self, form_id: str, download_format: str, form_data: DownloadQueryResultRequest
@@ -238,8 +259,11 @@ class FormOperations:
         response = requests.post(
             url=url,
             params=params,
-            json={"query": urllib.parse.quote(form_data.query)},
-            headers={"Authorization": f"Bearer {self.configs.auth_token}"},
+            json={"query": form_data.query},
+            headers={
+                "Authorization": f"Bearer {self.configs.auth_token}",
+                "Content-Type": "application/json",
+            },
         )
 
         if response.status_code == 401:

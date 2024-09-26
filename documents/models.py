@@ -18,7 +18,7 @@ class CreateFormResponse(BaseModel):
     fields: List[str]
     is_shared: bool
     is_searchable: bool
-    _id: str
+    id: str
     user_id: str
     created_at: datetime
 
@@ -60,7 +60,9 @@ class FilterFormResponse(BaseModel):
 
 
 class ExecuteFormAnalyticsRequest(BaseModel):
-    query: Optional[str] = ""
+    query: str = (
+        "{\n    'reason_for_no_pymongo_pipeline': 'No user request provided'\n}"
+    )
     skip: int = 0
     limit: int = 25
 
@@ -85,24 +87,24 @@ class WeavMetadata(BaseModel):
 
 
 class FormInstance(BaseModel):
-    Name: str
-    weav_metadata: WeavMetadata
+    Name: Optional[str] = ""
+    weav_metadata: Optional[WeavMetadata] = ""
 
 
 class FormInstanceDetail(BaseModel):
-    form_instance: FormInstance
+    form_instance: Optional[FormInstance] = None
     doc_id: str
     form_id: str
     file_name: str
     status: str
     category: str
-    in_folders: List[str]
+    in_folders: Optional[List[str]] = []
     owner_id: str
 
 
 class FilterFormInstanceResponse(BaseModel):
     total: int
-    form_instances: List[FormInstanceDetail]
+    form_instances: Optional[List[FormInstanceDetail]] = []
 
 
 class Field(BaseModel):
@@ -117,10 +119,10 @@ class GetFormDefinitonResponse(BaseModel):
     name: str
     category: str
     description: str
-    fields: List[Field]
+    fields: Optional[List[Field]] = []
     is_shared: bool
     is_searchable: bool
-    _id: str
+    id: str
     user_id: str
     created_at: str
 
@@ -135,3 +137,21 @@ class UpdateFormDefinitonRequest(BaseModel):
 
 class DownloadQueryResultRequest(BaseModel):
     query: Optional[str]
+
+
+class Metadata(BaseModel):
+    _id: str
+    file_name: str
+    in_folders: List[str]
+
+
+class Result(BaseModel):
+    testEnitity1: datetime
+    metadata: Metadata
+
+
+class ExecuteFormAnalyticsResponse(BaseModel):
+    summary: Optional[str]
+    results: List[Result]
+    total_count: int
+    columns: List[str]

@@ -60,6 +60,7 @@ class WorkflowService:
                 message=f"Failed to get workflow {workflow_name}",
                 response_data=response.json(),
             )
+
         return Workflow.parse_obj(response.json())
 
     def skip_steps_in_workflow(
@@ -152,5 +153,4 @@ class WorkflowService:
                 message="Failed to get workflows",
                 response_data=response.json(),
             )
-        print(response.json())
         return WorkflowStatusResponse.parse_obj(response.json())

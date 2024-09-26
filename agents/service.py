@@ -45,7 +45,6 @@ class AgentService:
             json=get_agent_request_body.dict(),
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
-        print(response.headers)
         if response.status_code == 401:
             raise AgentServiceException(
                 status_code=response.status_code,

@@ -1,5 +1,6 @@
 import sys
 import os
+from pprint import pprint
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -12,4 +13,4 @@ if __name__ == "__main__":
     agent_service = AgentService(configs=configs)
     agent_types = agent_service.get_agent_types()
 
-    print(agent_types.response)
+    pprint(agent_types.response)

@@ -1,4 +1,4 @@
-# python3 agents/get_agent_response.py --user_input "Summarize the document" --chat_id "google-oauth2|117349365869611297391_Insurance Underwriting AI Agent" --stream False --agent_type "Insurance Underwriting AI Agent"
+# python3 agents/get_agent_response.py --user_input "Summarize the document" --chat_id "google-oauth2|117349365869611297391_Insurance Underwriting AI Agent" --agent_type "Insurance Underwriting AI Agent"
 import sys
 import os
 
@@ -8,13 +8,6 @@ from service import AgentService
 from models import GetAgentRequest
 from config_models import LoadConfigurations, ServiceType, BOOL_CHOICES, get_bool_value
 import argparse
-
-
-def handle_parameters(user_input, chat_id, stream, agent_type):
-    print(f"User Input: {user_input}")
-    print(f"Chat ID: {chat_id}")
-    print(f"Stream: {stream}")
-    print(f"Agent Type: {agent_type}")
 
 
 if __name__ == "__main__":
@@ -31,8 +24,6 @@ if __name__ == "__main__":
     parser.add_argument("--agent_type", type=str, required=True, help="Agent type.")
 
     args = parser.parse_args()
-
-    handle_parameters(args.user_input, args.chat_id, args.stream, args.agent_type)
 
     body = GetAgentRequest(
         user_input=args.user_input,

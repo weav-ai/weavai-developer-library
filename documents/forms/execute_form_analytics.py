@@ -1,6 +1,7 @@
 import sys
 import os
 import argparse
+from pprint import pprint
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
@@ -14,7 +15,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Provide parameters for the script.")
 
     parser.add_argument("--form_id", type=str, required=True, help="Form ID")
-    parser.add_argument("--query", type=str, default="", required=False, help="Query")
     parser.add_argument(
         "--skip",
         type=int,
@@ -33,11 +33,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     body = ExecuteFormAnalyticsRequest(
-        query=args.query,
         skip=args.skip,
         limit=args.limit,
     )
     execute_form_analytics_response = form_operation.execute_form_analytics(
         form_id=args.form_id, form_data=body
     )
-    # pprint(form_create_response.dict())
+    pprint(execute_form_analytics_response.dict())

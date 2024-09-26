@@ -1,3 +1,5 @@
+# python3 workflows/get_workflow_status.py --workflow_id dagtasktest --workflow_run_id 66df87ec2b1edfc0dc3b556f_2461160a-117f-45ac-9fa0-f5590d977882
+
 import sys
 import os
 import argparse
@@ -26,14 +28,14 @@ if __name__ == "__main__":
         "--workflow_id",
         type=str,
         required=True,
-        help="Workflow",
+        help="Workflow Identifier",
     )
 
     parser.add_argument(
         "--workflow_run_id",
         type=str,
         required=True,
-        help="Workflow",
+        help="Workflow run identifier",
     )
     args = parser.parse_args()
 

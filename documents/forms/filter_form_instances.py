@@ -6,7 +6,7 @@ import argparse
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from config_models import LoadConfigurations, ServiceType
+from config_models import LoadConfigurations, ServiceType, BOOL_CHOICES, get_bool_value
 from documents.service import FormOperations
 from documents.models import FilterFormInstanceRequest
 
@@ -38,7 +38,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--category",
         type=str,
-        required=True,
+        default="",
+        required=False,
         help="Document category to be matched",
     )
     parser.add_argument(
@@ -53,7 +54,7 @@ if __name__ == "__main__":
         type=str,
         default="",
         required=False,
-        help="Only instance of this form definition",
+        help="Unique identifier for the form",
     )
     parser.add_argument(
         "--doc_id",
@@ -65,7 +66,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--only_latest",
         type=bool,
-        default=True,
+        choices=BOOL_CHOICES,
+        default="True",
         required=False,
         help="Only latest form extraction",
     )
@@ -74,14 +76,14 @@ if __name__ == "__main__":
         type=int,
         default=0,
         required=False,
-        help="Only latest form extraction",
+        help="Number of documents to skip",
     )
     parser.add_argument(
         "--limit",
         type=int,
         default=25,
         required=False,
-        help="Only latest form extraction",
+        help="Max fetch size",
     )
     args = parser.parse_args()
 
@@ -92,7 +94,7 @@ if __name__ == "__main__":
         query=args.query,
         form_id=args.form_id,
         doc_id=args.doc_id,
-        only_latest=args.only_latest,
+        only_latest=get_bool_value(args.only_latest),
         skip=args.skip,
         limit=args.limit,
     )

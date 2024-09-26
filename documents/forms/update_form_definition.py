@@ -8,7 +8,7 @@ import urllib.parse
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from documents.models import UpdateFormDefinitonRequest
-from config_models import LoadConfigurations, ServiceType
+from config_models import LoadConfigurations, ServiceType, BOOL_CHOICES, get_bool_value
 from documents.service import FormOperations
 from pprint import pprint
 
@@ -23,22 +23,30 @@ if __name__ == "__main__":
     parser.add_argument(
         "--description", type=str, required=True, help="Form description"
     )
-    parser.add_argument("--is_shared", type=bool, required=True, help="Form share mode")
+    parser.add_argument(
+        "--is_shared",
+        default="False",
+        choices=BOOL_CHOICES,
+        type=str,
+        required=True,
+        help="Form share mode",
+    )
     parser.add_argument(
         "--is_searchable",
-        type=bool,
-        default=None,
+        type=str,
+        default="False",
+        choices=BOOL_CHOICES,
         required=False,
         help="Form visibility mode",
     )
 
     args = parser.parse_args()
     body = UpdateFormDefinitonRequest(
-        name=urllib.parse.quote(args.name),
+        name=args.name,
         category=args.category,
         description=args.description,
-        is_shared=args.is_shared,
-        is_searchable=args.is_searchable,
+        is_shared=get_bool_value(args.is_shared),
+        is_searchable=get_bool_value(args.is_searchable),
     )
 
     form_update_response = form_operation.update_form_definition(
