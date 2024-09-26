@@ -5,9 +5,6 @@ This repository contains scripts for interacting with the Weav AI platform, incl
 ## Setup
 
 
-
-### Setup
-
 ### 1. Clone the Repository
 
 ```bash
