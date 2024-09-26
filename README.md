@@ -8,7 +8,7 @@ This repository contains scripts for interacting with the Weav AI platform, incl
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/weav-ai/weav-dev.git
+git clone https://github.com/weav-ai/weavai-developer-library.git
 ```
 
 ### 2. Change to the `scripts` branch
