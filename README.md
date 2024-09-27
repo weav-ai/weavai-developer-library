@@ -348,7 +348,7 @@ Response
 1. Filter form
 
 ```bash
-python3 documents/forms/filter_form.py --query "SECURITIES AND EXCHANGE COMMISSION" --scope "all_forms
+python3 documents/forms/filter_form.py --query "SECURITIES AND EXCHANGE COMMISSION" --scope "all_forms"
 ```
 
 Params
@@ -379,7 +379,7 @@ Response
 1. Get form definitions
 
 ```bash
-python3 documents/forms/get_form_definition.py --form_id "66f46e9b70dd6d497d9b8a37
+python3 documents/forms/get_form_definition.py --form_id "66f46e9b70dd6d497d9b8a37"
 ```
 
 Params
