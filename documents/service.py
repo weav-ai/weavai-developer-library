@@ -482,3 +482,43 @@ class DocumentOperations:
                 response_data=response.json(),
             )
         return DocumentSummaryResponse.parse_obj(response.json())
+
+    def get_document(
+        self, document_id: str, fill_pages: Optional[bool] = False
+    ) -> CreateDocumentResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.GET_DOCUMENT}".format(
+            DOC_ID=document_id
+        )
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+        }
+        params = [("fill_pages", fill_pages)]
+        response = requests.get(url, params=params, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to find document",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to get document",
+                response_data=response.json(),
+            )
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return CreateDocumentResponse.parse_obj(final_response)
