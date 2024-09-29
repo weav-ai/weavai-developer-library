@@ -12,6 +12,7 @@ from documents.models import (
     ExecuteFormAnalyticsResponse,
     CreateDocumentResponse,
     GetPageStatusResponse,
+    GetPageTextResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -370,3 +371,40 @@ class DocumentOperations:
             )
 
         return GetPageStatusResponse.parse_obj(response.json())
+
+    def get_page_text_and_words(self, document_id: str, page_number: int):
+        url = (
+            f"{self.configs.base_url}/{self.endpoints.GET_PAGE_TEXT_AND_WORDS}".format(
+                DOC_ID=document_id, PAGE_NUMBER=page_number
+            )
+        )
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+        }
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to find document",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to get page",
+                response_data=response.json(),
+            )
+        return GetPageTextResponse.parse_obj(response.json())

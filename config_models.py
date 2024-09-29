@@ -125,3 +125,4 @@ class ServiceEndpoints:
         self.DOWNLOAD_QUERY_RESULT = "forms/{FORM_ID}/analytics/download"
         self.CREATE_DOCUMENT = "/documents/"
         self.GET_PAGE = "documents/{DOC_ID}/pages/{PAGE_NUMBER}"
+        self.GET_PAGE_TEXT_AND_WORDS = "documents/{DOC_ID}/pages/{PAGE_NUMBER}/words"

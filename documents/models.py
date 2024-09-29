@@ -247,3 +247,21 @@ class GetPageStatusResponse(BaseModel):
     summary: str
     redacted_summary: str
     page_hierarchy: Optional[List[PageHierarchy]]
+
+
+class Word(BaseModel):
+    content: str
+    polygon: List[Dict[str, float]]
+    span: Dict[str, Any]
+    confidence: float
+
+
+class GetPageTextResponse(BaseModel):
+    page_number: int
+    media_type: str
+    page_text: str
+    status: str
+    classification: Classification
+    extracted_entities: List[ExtractedEntity]
+    redacted_summary: str
+    words: List[Word]
