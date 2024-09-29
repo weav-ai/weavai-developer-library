@@ -127,3 +127,4 @@ class ServiceEndpoints:
         self.GET_PAGE = "documents/{DOC_ID}/pages/{PAGE_NUMBER}"
         self.GET_PAGE_TEXT_AND_WORDS = "documents/{DOC_ID}/pages/{PAGE_NUMBER}/words"
         self.GET_PAGE_LEVEL_STATUS = "documents/{DOC_ID}/pages/status"
+        self.GET_DOCUMENT_SUMMARY_STATUS = "documents/{DOC_ID}/summary"
