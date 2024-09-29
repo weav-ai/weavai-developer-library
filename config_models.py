@@ -124,3 +124,4 @@ class ServiceEndpoints:
         self.DELETE_FORM_DEFINITON = "/forms/{FORM_ID}"
         self.DOWNLOAD_QUERY_RESULT = "forms/{FORM_ID}/analytics/download"
         self.CREATE_DOCUMENT = "/documents/"
+        self.GET_PAGE = "documents/{DOC_ID}/pages/{PAGE_NUMBER}"

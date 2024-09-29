@@ -195,9 +195,55 @@ class CreateDocumentResponse(BaseModel):
     redacted_summary: Optional[str] = ""
     summary_status: Optional[str] = ""
     step_status: Optional[Dict[str, StepStatus]] = {}
-    in_folders: List[str] = ""
+    in_folders: Optional[List[str]] = []
     tags: List[str]
     ai_tags: List[Any]
     user_id: str
     tenant_id: str
     form_instances: Optional[FormInstances] = None
+
+
+class StepStatusDetail(BaseModel):
+    status: Optional[str]
+    modified_at: Optional[datetime]
+    error: Optional[str]
+    response: Optional[Dict[str, Any]]
+
+
+class Classification(BaseModel):
+    page_class: str
+    page_sections: List[str]
+    page_no: Any
+
+
+class EntityDetail(BaseModel):
+    polygon: List[Any]
+    key: str
+    value: str
+    label: str
+    is_sensitive: bool
+
+
+class ExtractedEntity(BaseModel):
+    entity_group: str
+    entities: List[EntityDetail]
+
+
+class PageHierarchy(BaseModel):
+    text: str
+    type: str
+
+
+class GetPageStatusResponse(BaseModel):
+    page_number: int
+    media_type: str
+    download_url: str
+    page_text: str
+    status: str
+    step_status: Optional[Dict[str, StepStatusDetail]] = {}
+    classification: Optional[Classification]
+    extracted_entities: List[ExtractedEntity]
+    sensitive_words: List[Dict[str, Any]]
+    summary: str
+    redacted_summary: str
+    page_hierarchy: Optional[List[PageHierarchy]]
