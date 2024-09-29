@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Dict, Any
 from datetime import datetime
 
 
@@ -155,3 +155,49 @@ class ExecuteFormAnalyticsResponse(BaseModel):
     results: List[Result]
     total_count: int
     columns: List[str]
+
+
+class StepStatus(BaseModel):
+    status: str
+    modified_at: datetime
+    error: Optional[str]
+    response: Optional[Dict[str, Any]] = {}
+
+
+class Page(BaseModel):
+    page_number: int
+    media_type: str
+    download_url: str
+    page_text: Optional[str]
+    status: str
+    step_status: Optional[Dict[str, StepStatus]] = {}
+    classification: Dict[str, Any]
+
+
+class FormInstances(BaseModel):
+    additionalProp1: Optional[Dict[str, Any]] = {}
+    additionalProp2: Optional[Dict[str, Any]] = {}
+    additionalProp3: Optional[Dict[str, Any]] = {}
+
+
+class CreateDocumentResponse(BaseModel):
+    id: str
+    media_type: str
+    download_url: str
+    pages: List[Page]
+    status: str
+    file_name: str
+    created_at: datetime
+    size: int
+    source: str
+    category: Optional[str] = ""
+    summary: Optional[str] = ""
+    redacted_summary: Optional[str] = ""
+    summary_status: Optional[str] = ""
+    step_status: Optional[Dict[str, StepStatus]] = {}
+    in_folders: List[str] = ""
+    tags: List[str]
+    ai_tags: List[Any]
+    user_id: str
+    tenant_id: str
+    form_instances: Optional[FormInstances] = None

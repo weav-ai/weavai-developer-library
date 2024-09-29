@@ -10,11 +10,13 @@ from documents.models import (
     UpdateFormDefinitonRequest,
     DownloadQueryResultRequest,
     ExecuteFormAnalyticsResponse,
+    CreateDocumentResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
 import requests
 import urllib.parse
+from typing import Optional
 
 
 class FormOperations:
@@ -285,3 +287,45 @@ class FormOperations:
                 response_data=response.json(),
             )
         return GetFormDefinitonResponse.parse_obj(response.json())
+
+
+class DocumentOperations:
+
+    def __init__(self, configs):
+        self.configs = configs
+        self.endpoints = ServiceEndpoints()
+
+    def create_document(
+        self, file_path: str, folder_id: Optional[str] = ""
+    ) -> CreateDocumentResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.CREATE_DOCUMENT}"
+        files = {"file_uploaded": open(file_path, "rb")}
+        data = {"folder_id": folder_id} if folder_id else {}
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+            "Accept": "application/json",
+        }
+        response = requests.post(url, headers=headers, files=files, data=data)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to create document",
+                response_data=response.json(),
+            )
+
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return CreateDocumentResponse.parse_obj(final_response)
