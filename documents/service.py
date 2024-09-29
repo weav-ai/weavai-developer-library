@@ -15,6 +15,7 @@ from documents.models import (
     GetPageTextResponse,
     PageLevelStatusResponse,
     DocumentSummaryResponse,
+    DocumentHierarchyResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -522,3 +523,39 @@ class DocumentOperations:
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
         return CreateDocumentResponse.parse_obj(final_response)
+
+    def get_document_hierarchy(self, document_id: str) -> DocumentHierarchyResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.GET_DOCUMENT_HIERARCHY}".format(
+            DOC_ID=document_id
+        )
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+        }
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to find document",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to get document hierarchy",
+                response_data=response.json(),
+            )
+
+        return DocumentHierarchyResponse.parse_obj(response.json())

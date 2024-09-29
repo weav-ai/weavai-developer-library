@@ -283,3 +283,7 @@ class DocumentSummaryResponse(BaseModel):
     summary_status: str
     summary: Optional[str]
     redacted_summary: Optional[str]
+
+
+class DocumentHierarchyResponse(BaseModel):
+    hierarchy: List[Any] = []
