@@ -265,3 +265,15 @@ class GetPageTextResponse(BaseModel):
     extracted_entities: List[ExtractedEntity]
     redacted_summary: str
     words: List[Word]
+
+
+class ProcessStatus(BaseModel):
+    pages_done: int
+    pages_failed: int
+
+
+class PageLevelStatusResponse(BaseModel):
+    ocr: ProcessStatus
+    classification: ProcessStatus
+    entity_extraction: ProcessStatus
+    vectorization: ProcessStatus
