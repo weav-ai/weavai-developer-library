@@ -291,3 +291,7 @@ class DocumentHierarchyResponse(BaseModel):
 
 class DocumentCategoriesResponse(BaseModel):
     categories: List[str] = []
+
+
+class DocumentTagResponse(BaseModel):
+    tags: List[str] = []
