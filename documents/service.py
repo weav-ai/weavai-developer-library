@@ -16,6 +16,7 @@ from documents.models import (
     PageLevelStatusResponse,
     DocumentSummaryResponse,
     DocumentHierarchyResponse,
+    DocumentCategoriesResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -603,3 +604,37 @@ class DocumentOperations:
             return response.json()
         data = StringIO(response.text)
         return pd.read_csv(data)
+
+    def get_document_categories(self) -> DocumentCategoriesResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.GET_DOCUMENT_CATEGORIES}"
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+        }
+
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to find document",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to get document categories",
+                response_data=response.json(),
+            )
+        return DocumentCategoriesResponse(**response.json())

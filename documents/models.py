@@ -287,3 +287,7 @@ class DocumentSummaryResponse(BaseModel):
 
 class DocumentHierarchyResponse(BaseModel):
     hierarchy: List[Any] = []
+
+
+class DocumentCategoriesResponse(BaseModel):
+    categories: List[str] = []

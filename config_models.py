@@ -131,3 +131,4 @@ class ServiceEndpoints:
         self.GET_DOCUMENT = "documents/{DOC_ID}"
         self.GET_DOCUMENT_HIERARCHY = "documents/{DOC_ID}/hierarchy"
         self.DOWNLOAD_FORM_INSTANCE = "documents/{DOC_ID}/form/"
+        self.GET_DOCUMENT_CATEGORIES = "documents/categories/"
