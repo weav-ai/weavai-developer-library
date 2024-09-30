@@ -21,7 +21,9 @@ from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
 import requests
 import urllib.parse
-from typing import Optional
+from typing import Optional, Dict, Any, Union
+import pandas as pd
+from io import StringIO
 
 
 class FormOperations:
@@ -559,3 +561,45 @@ class DocumentOperations:
             )
 
         return DocumentHierarchyResponse.parse_obj(response.json())
+
+    def download_form_instance(
+        self, document_id: str, download_format: str
+    ) -> Union[Dict[str, Any], pd.DataFrame]:
+        url = f"{self.configs.base_url}/{self.endpoints.DOWNLOAD_FORM_INSTANCE}".format(
+            DOC_ID=document_id
+        )
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+        }
+        params = [("download_format", download_format)]
+        response = requests.get(url, params=params, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to find document",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to download form instance",
+                response_data=response.json(),
+            )
+
+        if download_format != "CSV":
+            return response.json()
+        data = StringIO(response.text)
+        return pd.read_csv(data)

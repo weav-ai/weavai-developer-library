@@ -1,2 +1,3 @@
-pydantic==1.10.17
+pydantic
 loguru
+pandas
