@@ -85,6 +85,15 @@ if __name__ == "__main__":
         required=False,
         help="Max fetch size",
     )
+
+    parser.add_argument(
+        "--all",
+        type=str,
+        choices=BOOL_CHOICES,
+        default="True",
+        required=False,
+        help="Max fetch size",
+    )
     args = parser.parse_args()
 
     body = FilterFormInstanceRequest(
@@ -97,6 +106,7 @@ if __name__ == "__main__":
         only_latest=get_bool_value(args.only_latest),
         skip=args.skip,
         limit=args.limit,
+        all=get_bool_value(args.all),
     )
     form_create_response = form_operation.filter_form_instances(form_data=body)
     print(form_create_response.model_dump())

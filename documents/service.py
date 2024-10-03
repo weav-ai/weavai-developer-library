@@ -148,6 +148,7 @@ class FormOperations:
             ("only_latest", form_data.only_latest),
             ("skip", form_data.skip),
             ("limit", form_data.limit),
+            ("all", form_data.all),
         ]
         filtered_params = [(k, v) for k, v in params if v is not None and v != ""]
         query_string = "&".join(

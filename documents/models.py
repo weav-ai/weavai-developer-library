@@ -71,14 +71,15 @@ class FilterFormInstanceRequest(BaseModel):
     scope: Literal[
         "all_documents", "current_document", "my_documents", "shared_documents"
     ]
-    status: Literal["", "NOT_STARTED", "IN_PROGRESS", "DONE", "FAILED"]
+    status: Optional[Literal["", "NOT_STARTED", "IN_PROGRESS", "DONE", "FAILED"]] = None
     category: Optional[str] = ""
     query: Optional[str] = ""
     form_id: Optional[str] = ""
     doc_id: Optional[str] = ""
-    only_latest: bool = False
-    skip: int = 0
-    limit: int = 25
+    only_latest: Optional[bool] = False
+    skip: Optional[int] = 0
+    limit: Optional[int] = 25
+    all: Optional[bool] = True
 
 
 class WeavMetadata(BaseModel):
