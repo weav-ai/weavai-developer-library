@@ -61,7 +61,7 @@ if __name__ == "__main__":
         type=str,
         default="",
         required=False,
-        help="Only instance of this form definition",
+        help="Unique identifier for the document",
     )
     parser.add_argument(
         "--only_latest",
@@ -90,9 +90,9 @@ if __name__ == "__main__":
         "--all",
         type=str,
         choices=BOOL_CHOICES,
-        default="True",
+        default="False",
         required=False,
-        help="Max fetch size",
+        help="If set to true, all instances are fetched",
     )
     args = parser.parse_args()
 

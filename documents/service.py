@@ -98,8 +98,11 @@ class FormOperations:
                 message="Failed to filter form data",
                 response_data=response.json(),
             )
-
-        return FilterFormResponse(forms=response.json())
+        response = response.json()
+        for item in response:
+            if "_id" in item:
+                item["id"] = item.pop("_id")
+        return FilterFormResponse(forms=response)
 
     def execute_form_analytics(
         self, form_id: str, form_data: ExecuteFormAnalyticsRequest

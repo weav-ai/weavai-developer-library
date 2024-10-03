@@ -8,6 +8,7 @@ from workflows.models import (
     RunWorkflowResponse,
     WorkflowRequest,
     WorkflowStatusResponse,
+    DocumentWorkflowRunsResponse,
 )
 from workflows.exceptions import WorkflowException
 import requests
@@ -156,3 +157,41 @@ class WorkflowService:
                 response_data=response.json(),
             )
         return WorkflowStatusResponse.model_validate(response.json())
+
+    def get_workflow_runs_for_document(
+        self,
+        doc_id: str,
+        state: str = "",
+        query: str = "",
+        skip: int = 0,
+        limit: int = 25,
+    ) -> DocumentWorkflowRunsResponse:
+        params = [
+            ("doc_id", doc_id),
+            ("state", state),
+            ("query", query),
+            ("skip", skip),
+            ("limit", limit),
+        ]
+        filtered_params = [
+            (name, value) for name, value in params if value not in ("", None)
+        ]
+        url = f"{self.configs.base_url}/{self.endpoints.WORKFLOW_RUNS}"
+        response = requests.get(
+            url=url,
+            params=filtered_params,
+            headers={"Authorization": f"Bearer {self.configs.auth_token}"},
+        )
+        if response.status_code == 401:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message=f"Failed to get workflow runs for {doc_id}",
+                response_data=response.json(),
+            )
+        return DocumentWorkflowRunsResponse.model_validate(response.json())

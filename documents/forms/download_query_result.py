@@ -26,7 +26,11 @@ if __name__ == "__main__":
         help="Download format",
     )
     parser.add_argument(
-        "--query", type=str, default="", required=False, help="Search query"
+        "--query",
+        type=str,
+        default="",
+        required=False,
+        help="This string is matched in category and description",
     )
 
     args = parser.parse_args()

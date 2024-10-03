@@ -63,3 +63,20 @@ class WorkflowStatusResponse(BaseModel):
     tasks: Optional[List[Task]] = []
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
+
+
+class DocumentRun(BaseModel):
+    run_id: str
+    workflow_id: str
+    document_id: str
+    document_name: str
+    in_folders: List[str]
+    state: str
+    start_date: str
+    end_date: str
+    created_at: Optional[str] = None
+
+
+class DocumentWorkflowRunsResponse(BaseModel):
+    docs: List[DocumentRun]
+    total: int

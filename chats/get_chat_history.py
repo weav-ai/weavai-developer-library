@@ -19,7 +19,7 @@ if __name__ == "__main__":
         "--chat_id",
         type=str,
         required=True,
-        help="Skip the first N messages",
+        help="Chat ID",
     )
     args = parser.parse_args()
 

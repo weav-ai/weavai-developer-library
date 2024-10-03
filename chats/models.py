@@ -49,7 +49,7 @@ class ChatRequest(BaseModel):
     user_input: str
     file_id: str
     chat_id: str
-    stream: bool
+    stream: bool = False
 
 
 class Classification(BaseModel):

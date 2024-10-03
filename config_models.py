@@ -33,6 +33,7 @@ class ServiceType(str, Enum):
     WORKFLOWS = "workflows"
     AGENT = "agent"
     DOCUMENT = "document"
+    CHATS = "chats"
 
 
 class ConfigModel(BaseModel):
@@ -54,11 +55,13 @@ class BaseURLMapper:
                 ServiceType.WORKFLOWS: "http://localhost:7036",
                 ServiceType.AGENT: "http://localhost:7031",
                 ServiceType.DOCUMENT: "http://localhost:7015",
+                ServiceType.CHATS: "http://localhost:7030",
             },
             EnvTypes.OTHER: {
                 ServiceType.AGENT: "/agent-prototype",
                 ServiceType.WORKFLOWS: "/workflow-service",
                 ServiceType.DOCUMENT: "/file-service",
+                ServiceType.CHATS: "/chat-service",
             },
         }
 
@@ -111,6 +114,7 @@ class ServiceEndpoints:
         self.RERUN_WORKFLOW = "workflows/{WORKFLOW_NAME}/re_run"
         self.RUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/run"
         self.WORKFLOW_STATUS = "/workflows/{WORKFLOW_ID}/{WORKFLOW_RUN_ID}/status"
+        self.WORKFLOW_RUNS = "/workflows/workflow_runs"
         self.GET_AGENT_TYPES = "agent/types"
         self.GET_AGENT_RESPONSE = "agent"
         self.GET_CHAT_HISTORY = "agent/chat_history?chat_id={CHAT_ID}"
@@ -133,3 +137,6 @@ class ServiceEndpoints:
         self.DOWNLOAD_FORM_INSTANCE = "documents/{DOC_ID}/form/"
         self.GET_DOCUMENT_CATEGORIES = "documents/categories/"
         self.GET_DOCUMENT_TAGS = "documents/tags/"
+        self.CHAT_LOGS = "/chat_logs/"
+        self.CHAT_HISTORY = "/chat_history"
+        self.CHAT = "/chat"

@@ -1,3 +1,5 @@
+# python3 documents/forms/filter_form.py --scope "all_forms" --is_searchable false --query "ANNUAL REPORT"
+
 import sys
 import os
 import argparse
@@ -32,7 +34,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--query",
         type=str,
-        required=True,
+        default="",
+        required=False,
         help="This string is matched in category and description",
     )
 

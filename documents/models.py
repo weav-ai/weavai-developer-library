@@ -1,21 +1,32 @@
 from pydantic import BaseModel
-from typing import List, Literal, Optional, Dict, Any
+from typing import List, Literal, Optional, Dict, Any, Union
 from datetime import datetime
+from uuid import uuid4
+
+
+class FormField(BaseModel):
+    identifier: Optional[str] = str(uuid4())
+    name: str
+    field_type: Literal["Number", "Date", "Text", "Table"]
+    description: Optional[str] = ""
+    is_array: Optional[bool] = False
+    fill_by_search: Optional[bool] = False
 
 
 class CreateFormRequest(BaseModel):
     name: str
     category: str
     description: str
-    is_shared: bool
-    is_searchable: bool
+    is_shared: Optional[bool] = False
+    is_searchable: Optional[bool] = False
+    fields: Optional[List[FormField]] = []
 
 
 class CreateFormResponse(BaseModel):
     name: str
     category: str
-    description: str
-    fields: List[str]
+    description: Optional[str] = ""
+    fields: Optional[List[FormField]] = []
     is_shared: bool
     is_searchable: bool
     id: str
@@ -50,7 +61,7 @@ class Form(BaseModel):
     fields: List[Field]
     is_shared: bool
     is_searchable: bool
-    _id: str
+    id: str
     user_id: str
     created_at: str
 
@@ -87,9 +98,16 @@ class WeavMetadata(BaseModel):
     status: str
 
 
+class FormData(BaseModel):
+    name: str
+    value: Any
+    identifier: str
+    weav_page_number: Union[List[int], int]
+
+
 class FormInstance(BaseModel):
-    Name: Optional[str] = ""
-    weav_metadata: Optional[WeavMetadata] = ""
+    data: Optional[List[FormData]] = []
+    metadata: Optional[WeavMetadata] = ""
 
 
 class FormInstanceDetail(BaseModel):
@@ -134,6 +152,7 @@ class UpdateFormDefinitonRequest(BaseModel):
     description: Optional[str] = ""
     is_shared: Optional[bool] = None
     is_searchable: Optional[bool] = None
+    fields: Optional[List[FormField]] = []
 
 
 class DownloadQueryResultRequest(BaseModel):
@@ -153,7 +172,7 @@ class Result(BaseModel):
 
 class ExecuteFormAnalyticsResponse(BaseModel):
     summary: Optional[str] = None
-    results: List[Result]
+    results: List[Dict[str, Any]]
     total_count: int
     columns: List[str]
 
@@ -295,4 +314,4 @@ class DocumentCategoriesResponse(BaseModel):
 
 
 class DocumentTagResponse(BaseModel):
-    tags: List[str] = []
+    tags: List[List[str]] = [[]]
