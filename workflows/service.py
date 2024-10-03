@@ -1,7 +1,7 @@
 # python3 workflows/get_workflow_status.py --workflow_id process_form_workflow --workflow_run_id 66df87ec2b1edfc0dc3b556f_f6328cd2-fbbf-41d0-a756-b111041cae6c
 
 from config_models import ConfigModel, ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
-from models import (
+from workflows.models import (
     GetAllWorkflowsResponse,
     Workflow,
     SkipStepsInWorkflowRequest,
@@ -9,7 +9,7 @@ from models import (
     WorkflowRequest,
     WorkflowStatusResponse,
 )
-from exceptions import WorkflowException
+from workflows.exceptions import WorkflowException
 import requests
 
 
@@ -18,7 +18,9 @@ class WorkflowService:
         self.configs = configs
         self.endpoints = ServiceEndpoints()
 
-    def get_all_workflows(self, show_internal_steps: bool) -> GetAllWorkflowsResponse:
+    def get_all_workflows(
+        self, show_internal_steps: bool = False
+    ) -> GetAllWorkflowsResponse:
         url = f"{self.configs.base_url}/{self.endpoints.GET_ALL_WORKFLOWS}"
         response = requests.get(
             url=url,

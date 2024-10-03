@@ -1,3 +1,5 @@
 pydantic
 loguru
 pandas
+python-dotenv
+requests
