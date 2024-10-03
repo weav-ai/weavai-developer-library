@@ -1,4 +1,4 @@
-# python3 workflows/get_single_workflow.py --workflow_name "dagtest"
+# python3 workflows/get_workflows_for_document.py --doc_id 66fe1752927ce8c0ebda42b9 --state "success" --query "ANNUAL REPORT" --skip 0 --limit 1
 
 import sys
 import os
@@ -19,7 +19,7 @@ if __name__ == "__main__":
         "--doc_id",
         type=str,
         required=True,
-        help="Document for which the workflow has to be run",
+        help="Document for which the workflow has to be fetched",
     )
 
     parser.add_argument(
