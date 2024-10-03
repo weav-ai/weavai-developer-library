@@ -60,7 +60,7 @@ class FormOperations:
             )
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return CreateFormResponse.parse_obj(final_response)
+        return CreateFormResponse.model_validate(final_response)
 
     def filter_form(self, form_data: FilterFormRequest) -> FilterFormResponse:
         url = f"{self.configs.base_url}/{self.endpoints.FILTER_FORM}"
@@ -132,7 +132,7 @@ class FormOperations:
                 message="Failed to execute form analytics",
                 response_data=response.json(),
             )
-        return ExecuteFormAnalyticsResponse.parse_obj(response.json())
+        return ExecuteFormAnalyticsResponse.model_validate(response.json())
 
     def filter_form_instances(
         self, form_data: FilterFormInstanceRequest
@@ -179,7 +179,7 @@ class FormOperations:
                 message="Failed to filter form instances",
                 response_data=response.json(),
             )
-        return FilterFormInstanceResponse.parse_obj(response.json())
+        return FilterFormInstanceResponse.model_validate(response.json())
 
     def get_form_definition(self, form_id: str) -> GetFormDefinitonResponse:
         url = f"{self.configs.base_url}/{self.endpoints.GET_FORM_DEFINITON.format(FORM_ID=form_id)}"
@@ -207,7 +207,7 @@ class FormOperations:
             )
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return GetFormDefinitonResponse.parse_obj(final_response)
+        return GetFormDefinitonResponse.model_validate(final_response)
 
     def update_form_definition(
         self, form_id: str, form_data: UpdateFormDefinitonRequest
@@ -238,7 +238,7 @@ class FormOperations:
             )
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return GetFormDefinitonResponse.parse_obj(final_response)
+        return GetFormDefinitonResponse.model_validate(final_response)
 
     def delete_form_definition(self, form_id: str) -> GetFormDefinitonResponse:
         url = f"{self.configs.base_url}/{self.endpoints.DELETE_FORM_DEFINITON.format(FORM_ID=form_id)}"
@@ -260,7 +260,7 @@ class FormOperations:
             )
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return GetFormDefinitonResponse.parse_obj(final_response)
+        return GetFormDefinitonResponse.model_validate(final_response)
 
     def download_query_result(
         self, form_id: str, download_format: str, form_data: DownloadQueryResultRequest
@@ -295,7 +295,7 @@ class FormOperations:
                 message="Failed to download form definition",
                 response_data=response.json(),
             )
-        return GetFormDefinitonResponse.parse_obj(response.json())
+        return GetFormDefinitonResponse.model_validate(response.json())
 
 
 class DocumentOperations:
@@ -337,7 +337,7 @@ class DocumentOperations:
 
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return CreateDocumentResponse.parse_obj(final_response)
+        return CreateDocumentResponse.model_validate(final_response)
 
     def get_page(
         self, document_id: str, page_number: int, bounding_boxes: Optional[bool] = False
@@ -377,7 +377,7 @@ class DocumentOperations:
                 response_data=response.json(),
             )
 
-        return GetPageStatusResponse.parse_obj(response.json())
+        return GetPageStatusResponse.model_validate(response.json())
 
     def get_page_text_and_words(
         self, document_id: str, page_number: int
@@ -416,7 +416,7 @@ class DocumentOperations:
                 message="Failed to get page",
                 response_data=response.json(),
             )
-        return GetPageTextResponse.parse_obj(response.json())
+        return GetPageTextResponse.model_validate(response.json())
 
     def get_page_level_status(self, document_id: str) -> PageLevelStatusResponse:
         url = f"{self.configs.base_url}/{self.endpoints.GET_PAGE_LEVEL_STATUS}".format(
@@ -451,7 +451,7 @@ class DocumentOperations:
                 message="Failed to get page level status",
                 response_data=response.json(),
             )
-        return PageLevelStatusResponse.parse_obj(response.json())
+        return PageLevelStatusResponse.model_validate(response.json())
 
     def get_document_summary_status(self, document_id: str) -> DocumentSummaryResponse:
         url = f"{self.configs.base_url}/{self.endpoints.GET_DOCUMENT_SUMMARY_STATUS}".format(
@@ -486,7 +486,7 @@ class DocumentOperations:
                 message="Failed to get summary status",
                 response_data=response.json(),
             )
-        return DocumentSummaryResponse.parse_obj(response.json())
+        return DocumentSummaryResponse.model_validate(response.json())
 
     def get_document(
         self, document_id: str, fill_pages: Optional[bool] = False
@@ -526,7 +526,7 @@ class DocumentOperations:
             )
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
-        return CreateDocumentResponse.parse_obj(final_response)
+        return CreateDocumentResponse.model_validate(final_response)
 
     def get_document_hierarchy(self, document_id: str) -> DocumentHierarchyResponse:
         url = f"{self.configs.base_url}/{self.endpoints.GET_DOCUMENT_HIERARCHY}".format(
@@ -562,7 +562,7 @@ class DocumentOperations:
                 response_data=response.json(),
             )
 
-        return DocumentHierarchyResponse.parse_obj(response.json())
+        return DocumentHierarchyResponse.model_validate(response.json())
 
     def download_form_instance(
         self, document_id: str, download_format: str

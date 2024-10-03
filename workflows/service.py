@@ -63,7 +63,7 @@ class WorkflowService:
                 response_data=response.json(),
             )
 
-        return Workflow.parse_obj(response.json())
+        return Workflow.model_validate(response.json())
 
     def skip_steps_in_workflow(
         self, workflow_name: str, data: SkipStepsInWorkflowRequest
@@ -86,7 +86,7 @@ class WorkflowService:
                 message=f"Failed to skip steps in workflow {workflow_name}",
                 response_data=response.json(),
             )
-        return Workflow.parse_obj(response.json())
+        return Workflow.model_validate(response.json())
 
     def rerun_workflow(
         self, workflow_name: str, data: WorkflowRequest
@@ -109,7 +109,7 @@ class WorkflowService:
                 message=f"Failed to re-run workflow {workflow_name}",
                 response_data=response.json(),
             )
-        return RunWorkflowResponse.parse_obj(response.json())
+        return RunWorkflowResponse.model_validate(response.json())
 
     def run_workflow(
         self, workflow_name: str, data: WorkflowRequest
@@ -132,7 +132,7 @@ class WorkflowService:
                 message=f"Failed to run workflow {workflow_name}",
                 response_data=response.json(),
             )
-        return RunWorkflowResponse.parse_obj(response.json())
+        return RunWorkflowResponse.model_validate(response.json())
 
     def get_workflow_status(
         self, show_internal_steps: bool, workflow_id: str, workflow_run_id: str
@@ -155,4 +155,4 @@ class WorkflowService:
                 message="Failed to get workflows",
                 response_data=response.json(),
             )
-        return WorkflowStatusResponse.parse_obj(response.json())
+        return WorkflowStatusResponse.model_validate(response.json())
