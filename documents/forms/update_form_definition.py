@@ -52,4 +52,4 @@ if __name__ == "__main__":
     form_update_response = form_operation.update_form_definition(
         form_id=args.form_id, form_data=body
     )
-    pprint(form_update_response.dict())
+    pprint(form_update_response.model_dump())

@@ -94,7 +94,7 @@ class WorkflowService:
         url = f"{self.configs.base_url}/{self.endpoints.RERUN_WORKFLOW.format(WORKFLOW_NAME=workflow_name)}"
         response = requests.post(
             url=url,
-            json=data.dict(),
+            json=data.model_dump(),
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
         if response.status_code == 401:
@@ -117,7 +117,7 @@ class WorkflowService:
         url = f"{self.configs.base_url}/{self.endpoints.RUN_WORKFLOW.format(WORKFLOW_NAME=workflow_name)}"
         response = requests.post(
             url=url,
-            json=data.dict(),
+            json=data.model_dump(),
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
         if response.status_code == 401:

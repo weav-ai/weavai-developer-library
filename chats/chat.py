@@ -47,4 +47,4 @@ if __name__ == "__main__":
     )
 
     chat_response = chat_service.chat(chat_request=body)
-    pprint(chat_response.dict())
+    pprint(chat_response.model_dump())

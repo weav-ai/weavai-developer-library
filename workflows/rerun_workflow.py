@@ -43,4 +43,4 @@ if __name__ == "__main__":
         workflow_name=args.workflow_name,
         data=WorkflowRequest(doc_id=args.doc_id, data=args.data),
     )
-    pprint(single_workflow_response.dict())
+    pprint(single_workflow_response.model_dump())

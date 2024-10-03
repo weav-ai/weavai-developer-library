@@ -14,4 +14,4 @@ if __name__ == "__main__":
     document_operation = DocumentOperations(configs=configs)
 
     download_form_response = document_operation.get_document_categories()
-    pprint(download_form_response.dict())
+    pprint(download_form_response.model_dump())

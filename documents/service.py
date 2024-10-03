@@ -37,7 +37,7 @@ class FormOperations:
         url = f"{self.configs.base_url}/{self.endpoints.CREATE_FORM}"
         response = requests.post(
             url=url,
-            json=form_data.dict(),
+            json=form_data.model_dump(),
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
         if response.status_code == 401:
@@ -215,7 +215,7 @@ class FormOperations:
         url = f"{self.configs.base_url}/{self.endpoints.UPDATE_FORM_DEFINITON.format(FORM_ID=form_id)}"
         response = requests.put(
             url=url,
-            json=form_data.dict(),
+            json=form_data.model_dump(),
             headers={"Authorization": f"Bearer {self.configs.auth_token}"},
         )
         if response.status_code == 401:

@@ -27,4 +27,4 @@ if __name__ == "__main__":
     page_level_response = document_operation.get_page_level_status(
         document_id=args.document_id
     )
-    pprint(page_level_response.dict())
+    pprint(page_level_response.model_dump())

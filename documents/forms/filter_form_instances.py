@@ -99,4 +99,4 @@ if __name__ == "__main__":
         limit=args.limit,
     )
     form_create_response = form_operation.filter_form_instances(form_data=body)
-    print(form_create_response.dict())
+    print(form_create_response.model_dump())

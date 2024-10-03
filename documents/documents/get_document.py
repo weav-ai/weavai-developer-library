@@ -36,4 +36,4 @@ if __name__ == "__main__":
     get_document_response = document_operation.get_document(
         document_id=args.document_id, fill_pages=get_bool_value(args.fill_pages)
     )
-    pprint(get_document_response.dict())
+    pprint(get_document_response.model_dump())

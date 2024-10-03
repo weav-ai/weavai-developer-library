@@ -47,4 +47,4 @@ if __name__ == "__main__":
         is_searchable=get_bool_value(args.is_searchable),
     )
     form_create_response = form_operation.create_form(form_data=body)
-    pprint(form_create_response.dict())
+    pprint(form_create_response.model_dump())

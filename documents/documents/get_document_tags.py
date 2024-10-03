@@ -14,4 +14,4 @@ if __name__ == "__main__":
     document_operation = DocumentOperations(configs=configs)
 
     get_tags_response = document_operation.get_document_tags()
-    pprint(get_tags_response.dict())
+    pprint(get_tags_response.model_dump())

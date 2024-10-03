@@ -39,4 +39,4 @@ if __name__ == "__main__":
     execute_form_analytics_response = form_operation.execute_form_analytics(
         form_id=args.form_id, form_data=body
     )
-    pprint(execute_form_analytics_response.dict())
+    pprint(execute_form_analytics_response.model_dump())

@@ -40,4 +40,4 @@ if __name__ == "__main__":
         page_number=args.page_number,
         bounding_boxes=get_bool_value(args.bounding_boxes),
     )
-    pprint(page_level_status_response.dict())
+    pprint(page_level_status_response.model_dump())

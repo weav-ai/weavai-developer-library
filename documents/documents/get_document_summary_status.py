@@ -27,4 +27,4 @@ if __name__ == "__main__":
     page_summary_response = document_operation.get_document_summary_status(
         document_id=args.document_id
     )
-    pprint(page_summary_response.dict())
+    pprint(page_summary_response.model_dump())

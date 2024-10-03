@@ -39,4 +39,4 @@ if __name__ == "__main__":
     document_create_response = document_operation.create_document(
         file_path=args.file_path, folder_id=args.folder_id
     )
-    pprint(document_create_response.dict())
+    pprint(document_create_response.model_dump())

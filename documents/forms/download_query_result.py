@@ -36,4 +36,4 @@ if __name__ == "__main__":
     download_query_response = form_operation.download_query_result(
         form_id=args.form_id, download_format=args.download_format, form_data=data
     )
-    pprint(download_query_response.dict())
+    pprint(download_query_response.model_dump())

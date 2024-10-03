@@ -27,4 +27,4 @@ if __name__ == "__main__":
     document_hierarchy_response = document_operation.get_document_hierarchy(
         document_id=args.document_id
     )
-    pprint(document_hierarchy_response.dict())
+    pprint(document_hierarchy_response.model_dump())

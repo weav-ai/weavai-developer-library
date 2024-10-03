@@ -30,4 +30,4 @@ if __name__ == "__main__":
     page_info_response = document_operation.get_page_text_and_words(
         document_id=args.document_id, page_number=args.page_number
     )
-    pprint(page_info_response.dict())
+    pprint(page_info_response.model_dump())
