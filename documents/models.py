@@ -161,19 +161,8 @@ class DownloadQueryResultRequest(BaseModel):
     )
 
 
-class Metadata(BaseModel):
-    _id: str
-    file_name: str
-    in_folders: List[str]
-
-
-class Result(BaseModel):
-    testEnitity1: datetime
-    metadata: Metadata
-
-
 class ExecuteFormAnalyticsResponse(BaseModel):
-    summary: Optional[str] = None
+    summary: Optional[str] = ""
     results: List[Dict[str, Any]]
     total_count: int
     columns: List[str]
@@ -182,7 +171,7 @@ class ExecuteFormAnalyticsResponse(BaseModel):
 class StepStatus(BaseModel):
     status: str
     modified_at: datetime
-    error: Optional[str] = None
+    error: Optional[str] = ""
     response: Optional[Dict[str, Any]] = {}
 
 

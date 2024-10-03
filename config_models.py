@@ -66,7 +66,7 @@ class BaseURLMapper:
         }
 
     def get_base_url(
-        self, env: EnvTypes, service: ServiceType, environment: Optional[str] = None
+        self, env: EnvTypes, service: ServiceType, environment: Optional[str] = ""
     ) -> str:
         if env == EnvTypes.LOCAL:
             return self.url_mapping.get(env, "Unknown environment").get(service)

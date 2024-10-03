@@ -74,7 +74,7 @@ class DocumentRun(BaseModel):
     state: str
     start_date: str
     end_date: str
-    created_at: Optional[str] = None
+    created_at: Optional[str] = ""
 
 
 class DocumentWorkflowRunsResponse(BaseModel):

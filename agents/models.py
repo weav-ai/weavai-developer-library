@@ -15,9 +15,9 @@ class GetAgentRequest(BaseModel):
 
 
 class GetAgentResponse(BaseModel):
-    id: Optional[str] = None
-    event: Optional[str] = None
-    data: Optional[str] = None
+    id: Optional[str] = ""
+    event: Optional[str] = ""
+    data: Optional[str] = ""
     retry: Optional[int] = None
 
 
