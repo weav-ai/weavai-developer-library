@@ -18,6 +18,7 @@ from documents.models import (
     DocumentHierarchyResponse,
     DocumentCategoriesResponse,
     DocumentTagResponse,
+    DownloadQueryResultResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -268,7 +269,7 @@ class FormOperations:
 
     def download_query_result(
         self, form_id: str, download_format: str, form_data: DownloadQueryResultRequest
-    ) -> GetFormDefinitonResponse:
+    ) -> Union[DownloadQueryResultResponse, pd.DataFrame]:
         url = f"{self.configs.base_url}/{self.endpoints.DOWNLOAD_QUERY_RESULT.format(FORM_ID=form_id)}"
         params = [("download_format", download_format)]
         response = requests.post(
@@ -299,7 +300,10 @@ class FormOperations:
                 message="Failed to download form definition",
                 response_data=response.json(),
             )
-        return GetFormDefinitonResponse.model_validate(response.json())
+        if download_format != "CSV":
+            return DownloadQueryResultResponse.model_validate(response.json())
+        data = StringIO(response.text)
+        return pd.read_csv(data)
 
 
 class DocumentOperations:

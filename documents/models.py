@@ -156,7 +156,9 @@ class UpdateFormDefinitonRequest(BaseModel):
 
 
 class DownloadQueryResultRequest(BaseModel):
-    query: Optional[str] = ""
+    query: str = (
+        "{\n    'reason_for_no_pymongo_pipeline': 'No user request provided'\n}"
+    )
 
 
 class Metadata(BaseModel):
@@ -315,3 +317,7 @@ class DocumentCategoriesResponse(BaseModel):
 
 class DocumentTagResponse(BaseModel):
     tags: List[List[str]] = [[]]
+
+
+class DownloadQueryResultResponse(BaseModel):
+    docs: Optional[List[Dict[str, Any]]] = []
