@@ -1,12 +1,12 @@
 import contextlib
 from config_models import ConfigModel, ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
-from models import (
+from agents.models import (
     GetAllAgentsResponse,
     GetAgentRequest,
     ChatHistoryResponse,
     GetAgentResponse,
 )
-from exceptions import AgentServiceException
+from agents.exceptions import AgentServiceException
 import requests
 from pydantic import ValidationError
 from typing import List
