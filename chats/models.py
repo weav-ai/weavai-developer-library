@@ -15,7 +15,7 @@ class Message(BaseModel):
     id: str
     timestamp: datetime
     type: str
-    valid: Optional[bool] = None
+    valid: Optional[bool] = True
     vote: str
     chat_id: str
     user_id: str
@@ -37,7 +37,7 @@ class ChatHistoryMessage(BaseModel):
     type: str
     vote: str
     search_results: List[Any]
-    generate_button: Optional[bool] = None
+    generate_button: Optional[bool] = True
     tags: List[Any]
 
 

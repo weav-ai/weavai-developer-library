@@ -1,6 +1,4 @@
-# python3 documents/forms/download_query_result.py --form_id 66f45d0db1d0dfb13c9974c3 --query "Test query"
-
-# {\n    'pymongo_pipeline': [\n        {\n            '$match': {\n                'Cost of revenue': {\n                    '$gt': 65000\n                }\n            }\n        },\n        {\n            '$project': {\n                'Cost of revenue': 1,\n                'metadata': 1\n            }\n        }\n    ]\n}
+# python3 documents/forms/download_query_result.py --form_id 66f3d44eeb87303bc52bb9b4
 
 import sys
 import os

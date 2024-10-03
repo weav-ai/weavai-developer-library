@@ -16,7 +16,7 @@ class FormField(BaseModel):
 class CreateFormRequest(BaseModel):
     name: str
     category: str
-    description: str
+    description: Optional[str] = ""
     is_shared: Optional[bool] = False
     is_searchable: Optional[bool] = False
     fields: Optional[List[FormField]] = []
@@ -37,13 +37,13 @@ class CreateFormResponse(BaseModel):
 class FilterFormRequest(BaseModel):
     query: str
     scope: Literal["all_forms", "my_forms"]
-    is_searchable: Optional[bool] = None
+    is_searchable: Optional[bool] = False
 
 
 class FilterFormResponse(BaseModel):
     query: str
     scope: Literal["all_forms", "my_forms"]
-    is_searchable: Optional[bool] = None
+    is_searchable: Optional[bool] = False
 
 
 class Field(BaseModel):
@@ -150,8 +150,8 @@ class UpdateFormDefinitonRequest(BaseModel):
     name: Optional[str] = ""
     category: Optional[str] = ""
     description: Optional[str] = ""
-    is_shared: Optional[bool] = None
-    is_searchable: Optional[bool] = None
+    is_shared: Optional[bool] = False
+    is_searchable: Optional[bool] = False
     fields: Optional[List[FormField]] = []
 
 
