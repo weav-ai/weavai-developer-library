@@ -46,7 +46,7 @@ class Field(BaseModel):
 class Form(BaseModel):
     name: str
     category: str
-    description: Optional[str]
+    description: Optional[str] = ""
     fields: List[Field]
     is_shared: bool
     is_searchable: bool
@@ -72,10 +72,10 @@ class FilterFormInstanceRequest(BaseModel):
         "all_documents", "current_document", "my_documents", "shared_documents"
     ]
     status: Literal["", "NOT_STARTED", "IN_PROGRESS", "DONE", "FAILED"]
-    category: Optional[str]
-    query: Optional[str]
-    form_id: Optional[str]
-    doc_id: Optional[str]
+    category: Optional[str] = ""
+    query: Optional[str] = ""
+    form_id: Optional[str] = ""
+    doc_id: Optional[str] = ""
     only_latest: bool = False
     skip: int = 0
     limit: int = 25
@@ -128,15 +128,15 @@ class GetFormDefinitonResponse(BaseModel):
 
 
 class UpdateFormDefinitonRequest(BaseModel):
-    name: Optional[str]
-    category: Optional[str]
-    description: Optional[str]
-    is_shared: Optional[bool]
-    is_searchable: Optional[bool]
+    name: Optional[str] = ""
+    category: Optional[str] = ""
+    description: Optional[str] = ""
+    is_shared: Optional[bool] = None
+    is_searchable: Optional[bool] = None
 
 
 class DownloadQueryResultRequest(BaseModel):
-    query: Optional[str]
+    query: Optional[str] = ""
 
 
 class Metadata(BaseModel):
@@ -151,7 +151,7 @@ class Result(BaseModel):
 
 
 class ExecuteFormAnalyticsResponse(BaseModel):
-    summary: Optional[str]
+    summary: Optional[str] = None
     results: List[Result]
     total_count: int
     columns: List[str]
@@ -160,7 +160,7 @@ class ExecuteFormAnalyticsResponse(BaseModel):
 class StepStatus(BaseModel):
     status: str
     modified_at: datetime
-    error: Optional[str]
+    error: Optional[str] = None
     response: Optional[Dict[str, Any]] = {}
 
 
@@ -168,7 +168,7 @@ class Page(BaseModel):
     page_number: int
     media_type: str
     download_url: str
-    page_text: Optional[str]
+    page_text: Optional[str] = ""
     status: str
     step_status: Optional[Dict[str, StepStatus]] = {}
     classification: Dict[str, Any]
@@ -204,10 +204,10 @@ class CreateDocumentResponse(BaseModel):
 
 
 class StepStatusDetail(BaseModel):
-    status: Optional[str]
-    modified_at: Optional[datetime]
-    error: Optional[str]
-    response: Optional[Dict[str, Any]]
+    status: Optional[str] = ""
+    modified_at: Optional[datetime] = None
+    error: Optional[str] = ""
+    response: Optional[Dict[str, Any]] = {}
 
 
 class Classification(BaseModel):
@@ -241,12 +241,12 @@ class GetPageStatusResponse(BaseModel):
     page_text: str
     status: str
     step_status: Optional[Dict[str, StepStatusDetail]] = {}
-    classification: Optional[Classification]
-    extracted_entities: List[ExtractedEntity]
+    classification: Optional[Classification] = None
+    extracted_entities: List[ExtractedEntity] = None
     sensitive_words: List[Dict[str, Any]]
     summary: str
     redacted_summary: str
-    page_hierarchy: Optional[List[PageHierarchy]]
+    page_hierarchy: Optional[List[PageHierarchy]] = None
 
 
 class Word(BaseModel):
@@ -281,8 +281,8 @@ class PageLevelStatusResponse(BaseModel):
 
 class DocumentSummaryResponse(BaseModel):
     summary_status: str
-    summary: Optional[str]
-    redacted_summary: Optional[str]
+    summary: Optional[str] = ""
+    redacted_summary: Optional[str] = ""
 
 
 class DocumentHierarchyResponse(BaseModel):

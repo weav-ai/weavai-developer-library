@@ -22,15 +22,15 @@ class GetAgentResponse(BaseModel):
 
 
 class Message(BaseModel):
-    message_id: Optional[str]
-    chat_id: Optional[str]
-    text: Optional[str]
-    timestamp: Optional[datetime]
-    type: Optional[str]
-    vote: Optional[str]
-    search_results: Optional[List[str]]
-    generate_button: Optional[str] = None
-    tags: Optional[List[str]]
+    message_id: Optional[str] = ""
+    chat_id: Optional[str] = ""
+    text: Optional[str] = ""
+    timestamp: Optional[datetime] = None
+    type: Optional[str] = ""
+    vote: Optional[str] = ""
+    search_results: Optional[List[str]] = []
+    generate_button: Optional[str] = ""
+    tags: Optional[List[str]] = []
 
 
 class ChatHistoryResponse(BaseModel):

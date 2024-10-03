@@ -4,10 +4,10 @@ from chats.models import (
     ChatLogsResponse,
     ChatHistoryResponse,
     ChatResponse,
+    ChatRequest,
 )
-from models import ChatRequest
 
-from exceptions import ChatServiceException
+from chats.exceptions import ChatServiceException
 import requests
 
 

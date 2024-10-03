@@ -1,4 +1,4 @@
-pydantic
+pydantic==2.9.2
 loguru
 pandas
 python-dotenv
