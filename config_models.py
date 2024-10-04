@@ -137,6 +137,7 @@ class ServiceEndpoints:
         self.DOWNLOAD_FORM_INSTANCE = "documents/{DOC_ID}/form/"
         self.GET_DOCUMENT_CATEGORIES = "documents/categories/"
         self.GET_DOCUMENT_TAGS = "documents/tags/"
+        self.TRIGGER_DOCUMENT_SUMMARY = "documents/{DOC_ID}/summary"
         self.CHAT_LOGS = "/chat_logs/"
         self.CHAT_HISTORY = "/chat_history"
         self.CHAT = "/chat"

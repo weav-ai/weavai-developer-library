@@ -310,3 +310,9 @@ class DocumentTagResponse(BaseModel):
 
 class DownloadQueryResultResponse(BaseModel):
     docs: Optional[List[Dict[str, Any]]] = []
+
+
+class DocumentSummaryResponse(BaseModel):
+    summary_status: str
+    summary: Optional[str] = ""
+    redacted_summary: Optional[str] = ""
