@@ -142,3 +142,4 @@ class ServiceEndpoints:
         self.CHAT_HISTORY = "/chat_history"
         self.CHAT = "/chat"
         self.CREATE_FOLDER = "/folders/"
+        self.GET_WRITABLE_FOLDERS = "/folders/writable-folders/"

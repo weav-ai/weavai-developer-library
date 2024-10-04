@@ -21,6 +21,7 @@ from documents.models import (
     DownloadQueryResultResponse,
     CreateFolderRequest,
     CreateFolderResponse,
+    WritableFoldersResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -756,3 +757,32 @@ class FolderOperations:
         final_response = response.json()
         final_response["id"] = final_response.pop("_id")
         return CreateFolderResponse.model_validate(final_response)
+
+    def get_writable_folders(self) -> WritableFoldersResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.GET_WRITABLE_FOLDERS}"
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+            "Accept": "application/json",
+        }
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to get writable folder",
+                response_data=response.json(),
+            )
+
+        return WritableFoldersResponse(folders=response.json())

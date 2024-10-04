@@ -344,3 +344,12 @@ class CreateFolderResponse(BaseModel):
     user_id: Optional[str] = ""
     tenant_id: Optional[str] = ""
     workflow: Workflow
+
+
+class WritableFolderData(BaseModel):
+    name: str
+    id: str
+
+
+class WritableFoldersResponse(BaseModel):
+    folders: Optional[List[WritableFolderData]] = []
