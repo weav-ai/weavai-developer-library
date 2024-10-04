@@ -19,6 +19,8 @@ from documents.models import (
     DocumentCategoriesResponse,
     DocumentTagResponse,
     DownloadQueryResultResponse,
+    CreateFolderRequest,
+    CreateFolderResponse,
 )
 from config_models import ServiceEndpoints, AUTHENTICATION_FAILED_MESSAGE
 from documents.exceptions import DocumentProcessingException
@@ -715,3 +717,42 @@ class DocumentOperations:
                 response_data=response.json(),
             )
         return DocumentSummaryResponse.model_validate(response.json())
+
+
+class FolderOperations:
+    def __init__(self, configs):
+        self.configs = configs
+        self.endpoints = ServiceEndpoints()
+
+    def create_folder(
+        self, folder_request: CreateFolderRequest
+    ) -> CreateFolderResponse:
+        url = f"{self.configs.base_url}/{self.endpoints.CREATE_FOLDER}"
+        headers = {
+            "Authorization": f"Bearer {self.configs.auth_token}",
+            "Accept": "application/json",
+        }
+        response = requests.post(url, headers=headers, json=folder_request.model_dump())
+
+        if response.status_code == 401:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 422:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Validation failed, ensure data entered is correct",
+                response_data=response.json(),
+            )
+        elif response.status_code != 200:
+            raise DocumentProcessingException(
+                status_code=response.status_code,
+                message="Failed to create folder",
+                response_data=response.json(),
+            )
+
+        final_response = response.json()
+        final_response["id"] = final_response.pop("_id")
+        return CreateFolderResponse.model_validate(final_response)
