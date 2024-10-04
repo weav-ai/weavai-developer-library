@@ -143,3 +143,4 @@ class ServiceEndpoints:
         self.CHAT = "/chat"
         self.CREATE_FOLDER = "/folders/"
         self.GET_WRITABLE_FOLDERS = "/folders/writable-folders/"
+        self.GET_FOLDER_DEFINITION = "/folders/{FOLDER_ID}"
