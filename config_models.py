@@ -80,7 +80,7 @@ class LoadConfigurations:
     def __init__(self, env_file_path: str = ENV_PATH):
         if not os.path.exists(env_file_path):
             raise ValueError("No environment file found")
-        load_dotenv(env_file_path)
+        load_dotenv(env_file_path, override=True)
 
     def __convert_env_str_to_enum(self, value) -> str:
         return EnvTypes.from_str(value) if value == "local" else value
