@@ -12,6 +12,7 @@ from workflows.models import (
 )
 from workflows.exceptions import WorkflowException
 import requests
+from typing import Optional
 
 
 class WorkflowService:
@@ -136,7 +137,10 @@ class WorkflowService:
         return RunWorkflowResponse.model_validate(response.json())
 
     def get_workflow_status(
-        self, show_internal_steps: bool, workflow_id: str, workflow_run_id: str
+        self,
+        workflow_id: str,
+        workflow_run_id: str,
+        show_internal_steps: Optional[bool] = False,
     ) -> WorkflowStatusResponse:
         url = f"{self.configs.base_url}/{self.endpoints.WORKFLOW_STATUS.format(WORKFLOW_ID=workflow_id,WORKFLOW_RUN_ID=workflow_run_id)}"
         response = requests.get(
