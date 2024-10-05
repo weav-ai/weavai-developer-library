@@ -253,10 +253,10 @@ class GetPageStatusResponse(BaseModel):
     status: str
     step_status: Optional[Dict[str, StepStatusDetail]] = {}
     classification: Optional[Classification] = None
-    extracted_entities: List[ExtractedEntity] = None
+    extracted_entities: Optional[List[ExtractedEntity]] = []
     sensitive_words: List[Dict[str, Any]]
-    summary: str
-    redacted_summary: str
+    summary: Optional[str] = ""
+    redacted_summary: Optional[str] = ""
     page_hierarchy: Optional[List[PageHierarchy]] = None
 
 
