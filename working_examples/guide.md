@@ -1,4 +1,9 @@
 # Document and Workflow Management Scripts
+
+## Overview
+
+This repository contains two Python scripts, `run_workflow.py` and `upload_and_get_document.py`, which are used to upload documents, retrieve documents, and interact with workflows. They allow users to perform tasks such as uploading documents, retrieving pages from documents, and running workflows on uploaded documents.
+
 ## Setup 
 
 **Step 1:**
@@ -13,9 +18,6 @@ Add environment variables to the `.env` file
 ENV = "https://subdomain.weav.ai"
 AUTH_TOKEN = "eyJhbGciOiJ..."
 ```
-## Overview
-
-This repository contains two Python scripts, `run_workflow.py` and `upload_and_get_document.py`, which are used to upload documents, retrieve documents, and interact with workflows. They allow users to perform tasks such as uploading documents, retrieving pages from documents, and running workflows on uploaded documents.
 
 ## Script Descriptions
 
@@ -47,7 +49,8 @@ Replace `<action>` with one of the following:
 
 The script will prompt for additional inputs based on the action chosen, such as file path, document ID, or page number.
 
-### 2. upload_and_get_document.py
+### 2. `upload_and_get_document.py`
+
 This script focuses on running workflows on uploaded documents and retrieving workflow statuses. It interacts with the WorkflowService and provides multiple actions:
 
 - **Retrieve All Workflows (`get_all_workflows`)**: List all available workflows.
