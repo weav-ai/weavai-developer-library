@@ -17,11 +17,30 @@ source myenv/bin/activate
 cd package
 ```
 
-### You can install the library by running
+### There are 2 ways to install the package.
+### Option 1: Direct install using `pip`
 ```
 pip3 install .
 ```
 
-### The library is now installed in the virtual environment.
+### Option 2: Building the wheel distribution
+### Run 
+```
+pip3 install -q build
+```
+
+```
+python3 -m build
+```
+
+### You will now observe a `dist/` folder generated in the `package` directory containing a `.tar.gz` file and a `.whl` file.
+### Run `pip` install on the `.whl` file
+```
+pip3 install build dist/weavaidev-0.0.1-py3-none-any.whl
+```
+
+
+
+## The library is now installed in the virtual environment.
 ### Play around with some sample examples are provided in `examples` folder. 
 ### Place your `.env` file in the same directory as where you would use it, in this case, the `examples` folder.
