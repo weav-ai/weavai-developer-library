@@ -1,11 +1,6 @@
-from pydantic import BaseModel, Field, validator
 from enum import Enum
-from dotenv import load_dotenv
-import os
-from loguru import logger
-from typing import Optional
 
-ENV_PATH = os.path.join(os.getcwd(), ".env")
+from weavaidev import Config
 
 VALIDATION_FAILED_MESSAGE = "Validation failed, ensure data entered is correct"
 AUTHENTICATION_FAILED_MESSAGE = "Authentication failed, please check AUTH token"
@@ -13,20 +8,9 @@ AUTHENTICATION_FAILED_MESSAGE = "Authentication failed, please check AUTH token"
 BOOL_CHOICES = ["True", "t", "true", "False", "f", "false"]
 
 
-def get_bool_value(value: str) -> bool:
-    return value in {"True", "true", "t"}
-
-
 class EnvTypes(str, Enum):
     LOCAL = "local"
     OTHER = "other"
-
-    @classmethod
-    def from_str(cls, env_str: str):
-        try:
-            return cls(env_str.lower())
-        except ValueError as e:
-            raise ValueError(f"Invalid environment type: {env_str}") from e
 
 
 class ServiceType(str, Enum):
@@ -36,75 +20,27 @@ class ServiceType(str, Enum):
     CHATS = "chats"
 
 
-class ConfigModel(BaseModel):
-    env: EnvTypes = Field(..., description="Environment type")
-    auth_token: str = Field(..., min_length=10, description="Authentication token")
-    base_url: str = Field(..., min_length=10, description="Base URL")
-
-    @validator("auth_token")
-    def validate_auth_token(cls, value):
-        if value.startswith("Bearer "):
-            raise ValueError("auth_token should not start with 'Bearer '")
-        return value
-
-
-class BaseURLMapper:
-    def __init__(self):
-        self.url_mapping = {
-            EnvTypes.LOCAL: {
-                ServiceType.WORKFLOWS: "http://localhost:7036",
-                ServiceType.AGENT: "http://localhost:7031",
-                ServiceType.DOCUMENT: "http://localhost:7015",
-                ServiceType.CHATS: "http://localhost:7030",
-            },
-            EnvTypes.OTHER: {
-                ServiceType.AGENT: "/agent-prototype",
-                ServiceType.WORKFLOWS: "workflow-service",
-                ServiceType.DOCUMENT: "/file-service",
-                ServiceType.CHATS: "/chat-service",
-            },
-        }
-
-    def get_base_url(
-        self, env: EnvTypes, service: ServiceType, environment: Optional[str] = ""
-    ) -> str:
-        if env == EnvTypes.LOCAL:
-            return self.url_mapping.get(env, "Unknown environment").get(service)
-        endpoint = self.url_mapping.get(EnvTypes.OTHER, "Unknown environment").get(
-            service
-        )
-        return f"{environment}{endpoint}"
+url_mapping = {
+    EnvTypes.LOCAL: {
+        ServiceType.WORKFLOWS: "http://localhost:7036",
+        ServiceType.AGENT: "http://localhost:7031",
+        ServiceType.DOCUMENT: "http://localhost:7015",
+        ServiceType.CHATS: "http://localhost:7030",
+    },
+    EnvTypes.OTHER: {
+        ServiceType.AGENT: "/agent-prototype",
+        ServiceType.WORKFLOWS: "workflow-service",
+        ServiceType.DOCUMENT: "/file-service",
+        ServiceType.CHATS: "/chat-service",
+    },
+}
 
 
-class LoadConfigurations:
-    def __init__(self, env_file_path: str = ENV_PATH):
-        print(env_file_path)
-        if not os.path.exists(env_file_path):
-            raise ValueError("No environment file found")
-        load_dotenv(env_file_path, override=True)
-
-    def __convert_env_str_to_enum(self, value) -> str:
-        return EnvTypes.from_str(value) if value == "local" else value
-
-    def set_config(self, service: ServiceType) -> ConfigModel:
-        env = os.getenv("ENV")
-        auth_token = os.getenv("AUTH_TOKEN")
-
-        try:
-            env_type = self.__convert_env_str_to_enum(env)
-            if isinstance(env_type, EnvTypes):
-                base_url = BaseURLMapper().get_base_url(env_type, service)
-            else:
-                base_url = BaseURLMapper().get_base_url(env_type, service, env_type)
-                env_type = EnvTypes.OTHER
-
-            configs = ConfigModel(
-                env=env_type, auth_token=auth_token, base_url=base_url
-            )
-            # logger.info("Config set.")
-            return configs
-        except Exception as e:
-            raise ValueError(f"Error loading configuration: {e}") from e
+def get_base_url(config: Config, service: ServiceType):
+    if config.env == EnvTypes.LOCAL:
+        return url_mapping.get(EnvTypes.LOCAL, "Unknown environment").get(service)
+    endpoint = url_mapping.get(EnvTypes.OTHER, "Unknown environment").get(service)
+    return f"{config.env}{endpoint}"
 
 
 class ServiceEndpoints:

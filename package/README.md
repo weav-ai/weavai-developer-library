@@ -40,7 +40,5 @@ pip3 install build dist/weavaidev-0.0.1-py3-none-any.whl
 ```
 
 
-
 ## The library is now installed in the virtual environment.
-### Play around with some sample examples are provided in `examples` folder. 
-### Place your `.env` file in the same directory as where you would use it, in this case, the `examples` folder.
+### Play around with some sample examples that are provided in `examples` folder. 
