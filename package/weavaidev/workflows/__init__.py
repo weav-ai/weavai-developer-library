@@ -46,7 +46,7 @@ class WorkflowService:
                 workflows, with an appropriate error message and response data.
 
         Returns:
-            GetAllWorkflowsResponse: A response object containing the list of 
+            GetAllWorkflowsResponse: A response object containing the list of
             workflows. The workflows are retrieved in JSON format.
         """
         url = f"{self.base_url}/{self.endpoints.GET_ALL_WORKFLOWS}"
@@ -84,12 +84,12 @@ class WorkflowService:
 
         Raises:
             WorkflowException: Raised if authentication fails (status code 401).
-            WorkflowException: Raised if any other error occurs while fetching the 
+            WorkflowException: Raised if any other error occurs while fetching the
                 workflow, with an appropriate error message and response data.
 
         Returns:
             Workflow: A validated `Workflow` object containing details of the requested
-            workflow. The workflow is returned in JSON format and validated using the 
+            workflow. The workflow is returned in JSON format and validated using the
             `Workflow` model.
         """
         url = f"{self.base_url}{self.endpoints.GET_SINGLE_WORKFLOW.format(WORKFLOW_NAME=workflow_name)}"
@@ -103,6 +103,12 @@ class WorkflowService:
             raise WorkflowException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message="Could not find workflow",
                 response_data=response.json(),
             )
         elif response.status_code != 200:
@@ -132,7 +138,7 @@ class WorkflowService:
 
         Returns:
             Workflow: A validated `Workflow` object representing the updated state of the
-            workflow after skipping the specified tasks. The response is returned in JSON format 
+            workflow after skipping the specified tasks. The response is returned in JSON format
             and validated using the `Workflow` model.
         """
         request_data = SkipStepsInWorkflowRequest(tasks=list(tasks))
@@ -146,6 +152,12 @@ class WorkflowService:
             raise WorkflowException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message="Could not find workflow",
                 response_data=response.json(),
             )
         elif response.status_code != 200:
@@ -179,7 +191,7 @@ class WorkflowService:
 
         Returns:
             RunWorkflowResponse: A response object representing the outcome of the
-            workflow re-run. The response is returned in JSON format and validated 
+            workflow re-run. The response is returned in JSON format and validated
             using the `RunWorkflowResponse` model.
         """
         request_data = WorkflowRequest(doc_id=doc_id, data=data)
@@ -193,6 +205,12 @@ class WorkflowService:
             raise WorkflowException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message="Could not find workflow",
                 response_data=response.json(),
             )
         elif response.status_code != 200:
@@ -209,13 +227,13 @@ class WorkflowService:
         """Executes a specific workflow with the provided data.
 
         This method triggers the execution of a workflow by its name, using the
-        given document ID and associated data. The workflow is run with the 
+        given document ID and associated data. The workflow is run with the
         specified inputs provided in the `data` dictionary.
 
         Args:
             workflow_name (str): The name of the workflow to be executed.
             doc_id (str): The document ID that is linked to the workflow execution.
-            data (Dict[str, Any]): A dictionary containing the data necessary to 
+            data (Dict[str, Any]): A dictionary containing the data necessary to
                 run the workflow, including inputs or parameters required for execution.
 
         Raises:
@@ -241,6 +259,12 @@ class WorkflowService:
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        elif response.status_code == 404:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message="Could not find workflow",
+                response_data=response.json(),
+            )
         elif response.status_code != 200:
             raise WorkflowException(
                 status_code=response.status_code,
@@ -258,19 +282,19 @@ class WorkflowService:
         """Fetches the status of a specific workflow run.
 
         This method retrieves the current status of a workflow execution based on
-        the provided workflow ID and workflow run ID. It can optionally show 
+        the provided workflow ID and workflow run ID. It can optionally show
         internal steps if `show_internal_steps` is set to True.
 
         Args:
             workflow_id (str): The ID of the workflow to check the status of.
             workflow_run_id (str): The ID of the specific workflow run whose status
                 needs to be fetched.
-            show_internal_steps (Optional[bool], optional): A flag to indicate 
+            show_internal_steps (Optional[bool], optional): A flag to indicate
                 whether internal steps of the workflow should be shown. Defaults to False.
 
         Raises:
             WorkflowException: Raised if authentication fails (status code 401).
-            WorkflowException: Raised if any other error occurs while fetching the 
+            WorkflowException: Raised if any other error occurs while fetching the
                 workflow status, with an appropriate error message and response data.
 
         Returns:
@@ -350,6 +374,12 @@ class WorkflowService:
             raise WorkflowException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise WorkflowException(
+                status_code=response.status_code,
+                message="Could not find document",
                 response_data=response.json(),
             )
         elif response.status_code != 200:

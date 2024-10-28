@@ -25,7 +25,7 @@ class ChatService:
     def get_chat_logs(self, chat_logs_request: GetChatLogsRequest) -> ChatLogsResponse:
         """Fetches chat logs based on the provided request.
 
-        This method retrieves chat logs filtered by the provided parameters such as date range, 
+        This method retrieves chat logs filtered by the provided parameters such as date range,
         pagination settings, and whether the chat is part of a standard operating procedure (SOP).
 
         Args:
@@ -102,6 +102,12 @@ class ChatService:
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        elif response.status_code == 404:
+            raise ChatServiceException(
+                status_code=response.status_code,
+                message="Could not find chat",
+                response_data=response.json(),
+            )
         elif response.status_code != 200:
             raise ChatServiceException(
                 status_code=response.status_code,
@@ -140,6 +146,12 @@ class ChatService:
             raise ChatServiceException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
+                response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise ChatServiceException(
+                status_code=response.status_code,
+                message="Could not find chat",
                 response_data=response.json(),
             )
         elif response.status_code != 200:

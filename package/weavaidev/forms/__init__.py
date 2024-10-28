@@ -176,6 +176,12 @@ class FormOperations:
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        elif response.status_code == 404:
+            raise FormProcessingException(
+                status_code=response.status_code,
+                message="Could not find form",
+                response_data="Could not find form",
+            )
         elif response.status_code != 200:
             raise FormProcessingException(
                 status_code=response.status_code,
@@ -325,6 +331,12 @@ class FormOperations:
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        elif response.status_code == 404:
+            raise FormProcessingException(
+                status_code=response.status_code,
+                message="Could not find form",
+                response_data="Could not find form",
+            )
         elif response.status_code != 200:
             raise FormProcessingException(
                 status_code=response.status_code,
@@ -408,6 +420,12 @@ class FormOperations:
                 status_code=response.status_code,
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
+            )
+        elif response.status_code == 404:
+            raise FormProcessingException(
+                status_code=response.status_code,
+                message="Could not find form",
+                response_data="Could not find form",
             )
         elif response.status_code != 200:
             raise FormProcessingException(
