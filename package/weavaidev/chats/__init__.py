@@ -22,19 +22,25 @@ class ChatService:
         self.endpoints = ServiceEndpoints()
         self.base_url = get_base_url(config=config, service=ServiceType.CHATS)
 
-    def get_chat_logs(self, chat_logs_request: GetChatLogsRequest) -> ChatLogsResponse:
+    def get_chat_logs(
+        self,
+        skip: int = 0,
+        limit: int = 25,
+        start_datetime: str = "",
+        end_datetime: str = "",
+        is_sop_chat: bool = False,
+    ) -> ChatLogsResponse:
         """Fetches chat logs based on the provided request.
 
         This method retrieves chat logs filtered by the provided parameters such as date range,
         pagination settings, and whether the chat is part of a standard operating procedure (SOP).
 
         Args:
-            chat_logs_request (GetChatLogsRequest): The request body containing the following parameters:
-                - skip (int): The number of records to skip for pagination. Defaults to 0.
-                - limit (int): The maximum number of records to return. Defaults to 25.
-                - start_datetime (Optional[str]): The start date and time to filter chat logs. Defaults to an empty string.
-                - end_datetime (Optional[str]): The end date and time to filter chat logs. Defaults to an empty string.
-                - is_sop_chat (bool): A flag to filter SOP chats.
+            - skip (int): The number of records to skip for pagination. Defaults to 0.
+            - limit (int): The maximum number of records to return. Defaults to 25.
+            - start_datetime (Optional[str]): The start date and time to filter chat logs. Defaults to an empty string.
+            - end_datetime (Optional[str]): The end date and time to filter chat logs. Defaults to an empty string.
+            - is_sop_chat (bool): A flag to filter SOP chats.
 
         Raises:
             ChatServiceException: Raised if authentication fails (status code 401).
@@ -44,6 +50,14 @@ class ChatService:
             ChatLogsResponse: A response object containing the list of messages and total record count.
         """
         url = f"{self.base_url}/{self.endpoints.CHAT_LOGS}"
+        chat_logs_request = GetChatLogsRequest(
+            skip=skip,
+            limit=limit,
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
+            is_sop_chat=is_sop_chat,
+        )
+
         params = [
             ("skip", chat_logs_request.skip),
             ("limit", chat_logs_request.limit),
@@ -116,18 +130,19 @@ class ChatService:
             )
         return ChatHistoryResponse(**response.json())
 
-    def chat(self, chat_request: ChatRequest) -> ChatResponse:
+    def chat(
+        self, user_input: str, chat_id: str, file_id: str, stream: bool = False
+    ) -> ChatResponse:
         """Sends a chat message to the service and returns the response.
 
         This method allows the user to send a message to the chat service and receive a response
         based on the user input, chat session, and other provided details.
 
         Args:
-            chat_request (ChatRequest): The request body containing the following parameters:
-                - user_input (str): The user's input text for the chat.
-                - file_id (str): The identifier of the file associated with the chat.
-                - chat_id (str): The unique identifier of the chat session.
-                - stream (bool, optional): A flag indicating whether the response should be streamed. Defaults to False.
+            - user_input (str): The user's input text for the chat.
+            - file_id (str): The identifier of the file associated with the chat.
+            - chat_id (str): The unique identifier of the chat session.
+            - stream (bool, optional): A flag indicating whether the response should be streamed. Defaults to False.
 
         Raises:
             ChatServiceException: Raised if authentication fails (status code 401).
@@ -136,6 +151,9 @@ class ChatService:
         Returns:
             ChatResponse: A response object containing the details of the chat message, search results, and tags.
         """
+        chat_request = ChatRequest(
+            user_input=user_input, chat_id=chat_id, stream=stream, file_id=file_id
+        )
         url = f"{self.base_url}/{self.endpoints.CHAT}"
         response = requests.post(
             url=url,

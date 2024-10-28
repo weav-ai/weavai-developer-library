@@ -1,3 +1,5 @@
+from typing import Optional
+
 import requests
 from weavaidev import Config
 from weavaidev.config_models import (
@@ -22,17 +24,16 @@ class FolderOperations:
         self.base_url = get_base_url(config=config, service=ServiceType.DOCUMENT)
 
     def create_folder(
-        self, folder_request: CreateFolderRequest
+        self, name: str, category: Optional[str] = "", description: Optional[str] = ""
     ) -> CreateFolderResponse:
         """Creates a new folder based on the provided request.
 
         This method sends a request to create a folder with the specified name, category, and description.
 
         Args:
-            folder_request (CreateFolderRequest): The request body containing the following parameters:
-                - name (str): The name of the folder to be created.
-                - category (Optional[str]): The category for the folder. Defaults to an empty string.
-                - description (Optional[str]): The description of the folder. Defaults to an empty string.
+            - name (str): The name of the folder to be created.
+            - category (Optional[str]): The category for the folder. Defaults to an empty string.
+            - description (Optional[str]): The description of the folder. Defaults to an empty string.
 
         Raises:
             FolderProcessingException: Raised if authentication fails (status code 401).
@@ -43,6 +44,9 @@ class FolderOperations:
             CreateFolderResponse: A response object containing details about the created folder, including its ID, documents, and workflow.
         """
         url = f"{self.base_url}/{self.endpoints.CREATE_FOLDER}"
+        folder_request = CreateFolderRequest(
+            name=name, category=category, description=description
+        )
         headers = {
             "Authorization": f"Bearer {self.config.auth_token}",
             "Accept": "application/json",

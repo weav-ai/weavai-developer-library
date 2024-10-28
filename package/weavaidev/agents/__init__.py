@@ -58,7 +58,7 @@ class AgentService:
         return GetAllAgentsResponse(response=response.json())
 
     def get_agent_response(
-        self, get_agent_request_body: GetAgentRequest
+        self, user_input: str, chat_id: str, agent_type: str, stream: bool = False
     ) -> List[GetAgentResponse]:
         """Fetches the response from an agent based on the user input.
 
@@ -66,11 +66,10 @@ class AgentService:
         for a given user input, chat ID, and other parameters.
 
         Args:
-            get_agent_request_body (GetAgentRequest): The request body containing the following parameters:
-                - user_input (str): The user's input to which the agent responds.
-                - chat_id (str): The unique identifier for the chat session.
-                - stream (bool): A flag indicating whether the response should be streamed.
-                - agent_type (str): The type of agent to use for generating the response.
+            - user_input (str): The user's input to which the agent responds.
+            - chat_id (str): The unique identifier for the chat session.
+            - stream (bool): A flag indicating whether the response should be streamed.
+            - agent_type (str): The type of agent to use for generating the response.
 
         Raises:
             AgentServiceException: Raised if authentication fails (status code 401).
@@ -81,6 +80,9 @@ class AgentService:
             List[GetAgentResponse]: A list of agent responses parsed from server-sent events (SSE).
         """
         url = f"{self.base_url}/{self.endpoints.GET_AGENT_RESPONSE}"
+        get_agent_request_body = GetAgentRequest(
+            user_input=user_input, chat_id=chat_id, stream=stream, agent_type=agent_type
+        )
         response = requests.post(
             url=url,
             json=get_agent_request_body.model_dump(),

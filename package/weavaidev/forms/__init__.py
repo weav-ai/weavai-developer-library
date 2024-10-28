@@ -1,6 +1,6 @@
 import urllib.parse
 from io import StringIO
-from typing import Union
+from typing import Literal, Optional, Union
 
 import pandas as pd
 import requests
@@ -82,14 +82,18 @@ class FormOperations:
         final_response["id"] = final_response.pop("_id")
         return CreateFormResponse.model_validate(final_response)
 
-    def filter_form(self, form_data: FilterFormRequest) -> FilterFormResponse:
+    def filter_form(
+        self,
+        query: str,
+        scope: Literal["all_forms", "my_forms"] = "all_forms",
+        is_searchable: Optional[bool] = False,
+    ) -> FilterFormResponse:
         """Filters forms based on the provided query and scope.
 
         Args:
-            form_data (FilterFormRequest): The request body containing the following parameters:
-                - query (str): The search query used to filter forms.
-                - scope (Literal["all_forms", "my_forms"]): The scope for filtering forms (all forms or only the user's forms).
-                - is_searchable (Optional[bool]): A flag to filter only searchable forms. Defaults to False.
+            - query (str): The search query used to filter forms.
+            - scope (Literal["all_forms", "my_forms"]): The scope for filtering forms (all forms or only the user's forms).
+            - is_searchable (Optional[bool]): A flag to filter only searchable forms. Defaults to False.
 
         Raises:
             FormProcessingException: Raised if authentication fails (status code 401), or if any other error occurs while filtering forms.
@@ -98,6 +102,9 @@ class FormOperations:
             FilterFormResponse: A response object containing the filtered forms based on the query and scope.
         """
         url = f"{self.base_url}/{self.endpoints.FILTER_FORM}"
+        form_data = FilterFormRequest(
+            query=query, scope=scope, is_searchable=is_searchable
+        )
         params = [
             ("query", form_data.query),
             ("scope", form_data.scope),
@@ -381,13 +388,16 @@ class FormOperations:
         return GetFormDefinitonResponse.model_validate(final_response)
 
     def download_query_result(
-        self, form_id: str, download_format: str, form_data: DownloadQueryResultRequest
+        self,
+        form_id: str,
+        form_data: DownloadQueryResultRequest,
+        download_format: Literal["JSON", "CSV"] = "JSON",
     ) -> Union[DownloadQueryResultResponse, pd.DataFrame]:
         """Downloads the result of a form query in the specified format.
 
         Args:
             form_id (str): The ID of the form whose query results are being downloaded.
-            download_format (str): The format in which to download the query result (e.g., CSV, JSON).
+            download_format Literal["JSON", "CSV"]: The format in which to download the query result (e.g., CSV, JSON).
             form_data (DownloadQueryResultRequest): The request body containing the query for retrieving the form results.
 
         Raises:
