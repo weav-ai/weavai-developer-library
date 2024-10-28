@@ -1,6 +1,6 @@
 import os
 from io import StringIO
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Literal, Optional, Union
 
 import pandas as pd
 import requests
@@ -42,7 +42,7 @@ class DocumentOperations:
 
         Raises:
             FileNotFoundError: Raised if the specified file path does not exist.
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or any other error occurs during document creation.
 
         Returns:
@@ -93,7 +93,7 @@ class DocumentOperations:
             bounding_boxes (Optional[bool]): A flag to include bounding boxes for text on the page. Defaults to False.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document or page is not found (status code 404).
 
         Returns:
@@ -146,7 +146,7 @@ class DocumentOperations:
             page_number (int): The page number within the document.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document or page is not found (status code 404).
 
         Returns:
@@ -193,7 +193,7 @@ class DocumentOperations:
             document_id (str): The ID of the document for which page-level status is being fetched.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document is not found (status code 404).
 
         Returns:
@@ -240,7 +240,7 @@ class DocumentOperations:
             document_id (str): The ID of the document for which the summary is being fetched.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document is not found (status code 404).
 
         Returns:
@@ -290,7 +290,7 @@ class DocumentOperations:
             fill_pages (Optional[bool]): A flag indicating whether to include detailed page data in the response. Defaults to False.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document is not found (status code 404).
 
         Returns:
@@ -340,7 +340,7 @@ class DocumentOperations:
             document_id (str): The ID of the document for which the hierarchy is being fetched.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document is not found (status code 404).
 
         Returns:
@@ -382,16 +382,16 @@ class DocumentOperations:
         return DocumentHierarchyResponse.model_validate(response.json())
 
     def download_form_instance(
-        self, document_id: str, download_format: str
+        self, document_id: str, download_format: Literal["JSON", "CSV"] = "JSON"
     ) -> Union[Dict[str, Any], pd.DataFrame]:
         """Downloads a form instance from a document in the specified format.
 
         Args:
             document_id (str): The ID of the document for which the form instance is being downloaded.
-            download_format (str): The format in which the form instance should be downloaded (e.g., CSV, JSON).
+            download_format (Literal[str]): The format in which the form instance should be downloaded (e.g., CSV, JSON).
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document or form instance is not found (status code 404).
 
         Returns:
@@ -440,7 +440,7 @@ class DocumentOperations:
         """Fetches all available document categories.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the request fails.
 
         Returns:
@@ -483,7 +483,7 @@ class DocumentOperations:
         """Retrieves all available document tags.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the request fails.
 
         Returns:
@@ -529,7 +529,7 @@ class DocumentOperations:
             document_id (str): The ID of the document for which the summary is being generated.
 
         Raises:
-            DocumentProcessingException: Raised if authentication fails (status code 401), 
+            DocumentProcessingException: Raised if authentication fails (status code 401),
                 validation fails (status code 422), or if the document is not found (status code 404).
 
         Returns:

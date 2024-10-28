@@ -7,7 +7,7 @@ from weavaidev.config_models import (
     ServiceType,
     get_base_url,
 )
-from weavaidev.folders.exceptions import FormProcessingException
+from weavaidev.folders.exceptions import FolderProcessingException
 from weavaidev.folders.models import (
     CreateFolderRequest,
     CreateFolderResponse,
@@ -35,9 +35,9 @@ class FolderOperations:
                 - description (Optional[str]): The description of the folder. Defaults to an empty string.
 
         Raises:
-            FormProcessingException: Raised if authentication fails (status code 401).
-            FormProcessingException: Raised if folder validation fails (status code 422).
-            FormProcessingException: Raised if any other error occurs while creating the folder.
+            FolderProcessingException: Raised if authentication fails (status code 401).
+            FolderProcessingException: Raised if folder validation fails (status code 422).
+            FolderProcessingException: Raised if any other error occurs while creating the folder.
 
         Returns:
             CreateFolderResponse: A response object containing details about the created folder, including its ID, documents, and workflow.
@@ -50,19 +50,19 @@ class FolderOperations:
         response = requests.post(url, headers=headers, json=folder_request.model_dump())
 
         if response.status_code == 401:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
         elif response.status_code == 422:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
         elif response.status_code != 200:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message="Failed to create folder",
                 response_data=response.json(),
@@ -78,8 +78,8 @@ class FolderOperations:
         This method retrieves folders where the user has write access, returning folder names and IDs.
 
         Raises:
-            FormProcessingException: Raised if authentication fails (status code 401).
-            FormProcessingException: Raised if the request fails (status code 422 or any other non-200 status).
+            FolderProcessingException: Raised if authentication fails (status code 401).
+            FolderProcessingException: Raised if the request fails (status code 422 or any other non-200 status).
 
         Returns:
             WritableFoldersResponse: A response object containing a list of folders the user can write to.
@@ -92,19 +92,19 @@ class FolderOperations:
         response = requests.get(url, headers=headers)
 
         if response.status_code == 401:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
         elif response.status_code == 422:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
         elif response.status_code != 200:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message="Failed to get writable folder",
                 response_data=response.json(),
@@ -121,9 +121,9 @@ class FolderOperations:
             folder_id (str): The ID of the folder for which the definition is being fetched.
 
         Raises:
-            FormProcessingException: Raised if authentication fails (status code 401).
-            FormProcessingException: Raised if folder validation fails (status code 422).
-            FormProcessingException: Raised if any other error occurs while retrieving the folder definition.
+            FolderProcessingException: Raised if authentication fails (status code 401).
+            FolderProcessingException: Raised if folder validation fails (status code 422).
+            FolderProcessingException: Raised if any other error occurs while retrieving the folder definition.
 
         Returns:
             CreateFolderResponse: A response object containing the details of the folder, including its documents, workflow, and metadata.
@@ -136,19 +136,25 @@ class FolderOperations:
         response = requests.get(url, headers=headers)
 
         if response.status_code == 401:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
         elif response.status_code == 422:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message=VALIDATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        elif response.status_code == 404:
+            raise FolderProcessingException(
+                status_code=response.status_code,
+                message="Failed to find folder",
+                response_data=response.json(),
+            )
         elif response.status_code != 200:
-            raise FormProcessingException(
+            raise FolderProcessingException(
                 status_code=response.status_code,
                 message="Failed to get folder definition",
                 response_data=response.json(),
