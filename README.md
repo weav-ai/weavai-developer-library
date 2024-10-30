@@ -1,6 +1,6 @@
 ## Setup
 
-### Create a new virtual environment
+### Create a new virtual environment with Python3 3.11+
 
 ```
 python3 -m venv myenv
