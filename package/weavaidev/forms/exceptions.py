@@ -1,4 +1,4 @@
-class WorkflowException(Exception):
+class FormProcessingException(Exception):
     def __init__(self, status_code, message, response_data=None):
         self.status_code = status_code
         self.message = message
