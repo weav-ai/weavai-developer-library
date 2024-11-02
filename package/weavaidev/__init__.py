@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 
 class Config(BaseModel):
-    auth_token: str
+    auth_token: SecretStr
     env: str

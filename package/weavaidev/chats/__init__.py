@@ -16,7 +16,7 @@ from weavaidev.config_models import (
 )
 
 
-class ChatService:
+class ChatOperations:
     def __init__(self, config: Config):
         self.config = config
         self.endpoints = ServiceEndpoints()

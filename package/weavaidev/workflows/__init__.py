@@ -21,7 +21,7 @@ from weavaidev.workflows.models import (
 )
 
 
-class WorkflowService:
+class WorkflowOperations:
     def __init__(self, config: Config):
         self.config = config
         self.endpoints = ServiceEndpoints()

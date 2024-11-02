@@ -20,7 +20,7 @@ from weavaidev.config_models import (
 )
 
 
-class AgentService:
+class AgentOperations:
     def __init__(self, config: Config):
         self.config = config
         self.endpoints = ServiceEndpoints()

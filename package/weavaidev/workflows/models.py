@@ -1,9 +1,10 @@
-from pydantic import BaseModel
-from typing import List, Any, Optional
 from datetime import datetime
+from typing import Any, List, Optional
+
+from pydantic import BaseModel
 
 
-class Task(BaseModel):
+class WorkflowTask(BaseModel):
     name: str
     is_active: bool
     downstream_tasks: List[str]
@@ -11,7 +12,7 @@ class Task(BaseModel):
 
 class Workflow(BaseModel):
     name: str
-    tasks: List[Task]
+    tasks: List[WorkflowTask]
     params: List[str]
 
 
