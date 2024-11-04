@@ -23,12 +23,12 @@ class ServiceType(str, Enum):
 url_mapping = {
     EnvTypes.LOCAL: {
         ServiceType.WORKFLOWS: "http://localhost:7036",
-        ServiceType.AGENT: "http://localhost:7031",
+        ServiceType.AGENT: "http://localhost:7052",
         ServiceType.DOCUMENT: "http://localhost:7015",
         ServiceType.CHATS: "http://localhost:7030",
     },
     EnvTypes.OTHER: {
-        ServiceType.AGENT: "/agent-prototype",
+        ServiceType.AGENT: "agent-service",
         ServiceType.WORKFLOWS: "workflow-service",
         ServiceType.DOCUMENT: "/file-service",
         ServiceType.CHATS: "/chat-service",
@@ -52,10 +52,9 @@ class ServiceEndpoints:
         self.RUN_WORKFLOW = "/workflows/{WORKFLOW_NAME}/run"
         self.WORKFLOW_STATUS = "/workflows/{WORKFLOW_ID}/{WORKFLOW_RUN_ID}/status"
         self.WORKFLOW_RUNS = "/workflows/workflow_runs"
-        self.GET_AGENT_TYPES = "agent/types"
-        self.GET_AGENT_RESPONSE = "agent"
-        self.GET_CHAT_HISTORY = "agent/chat_history?chat_id={CHAT_ID}"
-        self.DELETE_CHAT_HISTORY = "agent/delete/chat"
+        self.GET_AGENT_CONFIGURATIONS = "agents/configurations/"
+        self.GET_AGENT_RESPONSE = "/agents/"
+        self.GET_AGENT = "agents/configurations?agent_id={AGENT_ID}"
         self.CREATE_FORM = "forms/"
         self.FILTER_FORM = "forms/"
         self.EXECUTE_FORM_ANALYTICS = "forms/{FORM_ID}/analytics/"
@@ -81,3 +80,5 @@ class ServiceEndpoints:
         self.CREATE_FOLDER = "/folders/"
         self.GET_WRITABLE_FOLDERS = "/folders/writable-folders/"
         self.GET_FOLDER_DEFINITION = "/folders/{FOLDER_ID}"
+        self.GET_ACTION_TYPES = "/actions/"
+        self.GET_ACTION_TYPE_CONFIGURATIONS = "/actions/{ACTION_TYPE}"

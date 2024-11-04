@@ -48,7 +48,7 @@ class FolderOperations:
             name=name, category=category, description=description
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
             "Accept": "application/json",
         }
         response = requests.post(url, headers=headers, json=folder_request.model_dump())
@@ -90,7 +90,7 @@ class FolderOperations:
         """
         url = f"{self.base_url}/{self.endpoints.GET_WRITABLE_FOLDERS}"
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
             "Accept": "application/json",
         }
         response = requests.get(url, headers=headers)
@@ -134,7 +134,7 @@ class FolderOperations:
         """
         url = f"{self.base_url}/{self.endpoints.GET_FOLDER_DEFINITION.format(FOLDER_ID=folder_id)}"
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
             "Accept": "application/json",
         }
         response = requests.get(url, headers=headers)

@@ -70,7 +70,7 @@ class ChatOperations:
         response = requests.get(
             url=url,
             params=filtered_params,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise ChatServiceException(
@@ -108,7 +108,7 @@ class ChatOperations:
         response = requests.get(
             url=url,
             params=params,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise ChatServiceException(
@@ -158,7 +158,7 @@ class ChatOperations:
         response = requests.post(
             url=url,
             json=chat_request.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise ChatServiceException(

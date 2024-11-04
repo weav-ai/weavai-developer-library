@@ -53,7 +53,7 @@ class WorkflowOperations:
         response = requests.get(
             url=url,
             params=[("show_internal_steps", show_internal_steps)],
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(
@@ -96,7 +96,7 @@ class WorkflowOperations:
         response = requests.get(
             url=url,
             params=[("show_internal_steps", show_internal_steps)],
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         logger.info(f"{response.status_code}")
         if response.status_code == 401:
@@ -146,7 +146,7 @@ class WorkflowOperations:
         response = requests.post(
             url=url,
             json=request_data.tasks,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(
@@ -199,7 +199,7 @@ class WorkflowOperations:
         response = requests.post(
             url=url,
             json=request_data.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(
@@ -251,7 +251,7 @@ class WorkflowOperations:
         response = requests.post(
             url=url,
             json=request_data.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(
@@ -307,7 +307,7 @@ class WorkflowOperations:
         response = requests.get(
             url=url,
             params=[("show_internal_steps", show_internal_steps)],
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(
@@ -368,7 +368,7 @@ class WorkflowOperations:
         response = requests.get(
             url=url,
             params=filtered_params,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise WorkflowException(

@@ -58,7 +58,7 @@ class FormOperations:
         response = requests.post(
             url=url,
             json=form_data.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -119,7 +119,7 @@ class FormOperations:
         )
         response = requests.get(
             url=f"{url}?{query_string}",
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -167,7 +167,7 @@ class FormOperations:
             url=url,
             json=final_data,
             headers={
-                "Authorization": f"Bearer {self.config.auth_token}",
+                "Authorization": f"Bearer {self.config.auth_token._secret_value}",
                 "Content-Type": "application/json",
             },
         )
@@ -244,7 +244,7 @@ class FormOperations:
 
         response = requests.get(
             url=f"{url}?{query_string}",
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -281,7 +281,7 @@ class FormOperations:
         url = f"{self.base_url}/{self.endpoints.GET_FORM_DEFINITON.format(FORM_ID=form_id)}"
         response = requests.get(
             url=url,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -324,7 +324,7 @@ class FormOperations:
         response = requests.put(
             url=url,
             json=form_data.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -369,7 +369,7 @@ class FormOperations:
         url = f"{self.base_url}/{self.endpoints.DELETE_FORM_DEFINITON.format(FORM_ID=form_id)}"
         response = requests.delete(
             url=url,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise FormProcessingException(
@@ -414,7 +414,7 @@ class FormOperations:
             params=params,
             json={"query": form_data.query},
             headers={
-                "Authorization": f"Bearer {self.config.auth_token}",
+                "Authorization": f"Bearer {self.config.auth_token._secret_value}",
                 "Content-Type": "application/json",
             },
         )

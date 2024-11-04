@@ -54,7 +54,7 @@ class DocumentOperations:
         files = {"file_uploaded": open(file_path, "rb")}
         data = {"folder_id": folder_id} if folder_id else {}
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
             "Accept": "application/json",
         }
         response = requests.post(url, headers=headers, files=files, data=data)
@@ -103,7 +103,7 @@ class DocumentOperations:
             DOC_ID=document_id, PAGE_NUMBER=page_number
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         response = requests.get(
             url, headers=headers, params=[("bounding_boxes", bounding_boxes)]
@@ -156,7 +156,7 @@ class DocumentOperations:
             DOC_ID=document_id, PAGE_NUMBER=page_number
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         response = requests.get(url, headers=headers)
 
@@ -203,7 +203,7 @@ class DocumentOperations:
             DOC_ID=document_id
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         response = requests.get(url, headers=headers)
 
@@ -250,7 +250,7 @@ class DocumentOperations:
             DOC_ID=document_id
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         response = requests.get(url, headers=headers)
 
@@ -300,7 +300,7 @@ class DocumentOperations:
             DOC_ID=document_id
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         params = [("fill_pages", fill_pages)]
         response = requests.get(url, params=params, headers=headers)
@@ -350,7 +350,7 @@ class DocumentOperations:
             DOC_ID=document_id
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         response = requests.get(url, headers=headers)
 
@@ -401,7 +401,7 @@ class DocumentOperations:
             DOC_ID=document_id
         )
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
         params = [("download_format", download_format)]
         response = requests.get(url, params=params, headers=headers)
@@ -448,7 +448,7 @@ class DocumentOperations:
         """
         url = f"{self.base_url}/{self.endpoints.GET_DOCUMENT_CATEGORIES}"
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
 
         response = requests.get(url, headers=headers)
@@ -491,7 +491,7 @@ class DocumentOperations:
         """
         url = f"{self.base_url}/{self.endpoints.GET_DOCUMENT_TAGS}"
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
 
         response = requests.get(url, headers=headers)
@@ -537,7 +537,7 @@ class DocumentOperations:
         """
         url = f"{self.base_url}/{self.endpoints.TRIGGER_DOCUMENT_SUMMARY.format(DOC_ID=document_id)}"
         headers = {
-            "Authorization": f"Bearer {self.config.auth_token}",
+            "Authorization": f"Bearer {self.config.auth_token._secret_value}",
         }
 
         response = requests.post(url, headers=headers)

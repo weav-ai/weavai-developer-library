@@ -6,10 +6,10 @@ from pydantic import ValidationError
 from weavaidev import Config
 from weavaidev.agents.exceptions import AgentServiceException
 from weavaidev.agents.models import (
-    ChatHistoryResponse,
+    AgentConfiguration,
+    AgentConfigurations,
     GetAgentRequest,
     GetAgentResponse,
-    GetAllAgentsResponse,
 )
 from weavaidev.config_models import (
     AUTHENTICATION_FAILED_MESSAGE,
@@ -26,7 +26,7 @@ class AgentOperations:
         self.endpoints = ServiceEndpoints()
         self.base_url = get_base_url(config=config, service=ServiceType.AGENT)
 
-    def get_agent_types(self) -> GetAllAgentsResponse:
+    def get_all_agents(self) -> AgentConfigurations:
         """Fetches all available agent types.
 
         This method sends a request to retrieve the different types of agents that
@@ -37,11 +37,12 @@ class AgentOperations:
             AgentServiceException: Raised if any other error occurs while fetching agent types.
 
         Returns:
-            GetAllAgentsResponse: A response object containing a list of available agent types.
+            AgentConfigurations: A response object containing a list of available agent configurations.
         """
-        url = f"{self.base_url}/{self.endpoints.GET_AGENT_TYPES}"
+        url = f"{self.base_url}/{self.endpoints.GET_AGENT_CONFIGURATIONS}"
         response = requests.get(
-            url=url, headers={"Authorization": f"Bearer {self.config.auth_token}"}
+            url=url,
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise AgentServiceException(
@@ -49,16 +50,28 @@ class AgentOperations:
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
+        if response.status_code == 404:
+            raise AgentServiceException(
+                status_code=response.status_code,
+                message="Failed to find agent configurations",
+                response_data=None,
+            )
         elif response.status_code != 200:
             raise AgentServiceException(
                 status_code=response.status_code,
                 message="Failed to get agent types",
                 response_data=response.json(),
             )
-        return GetAllAgentsResponse(response=response.json())
+        response_json = response.json()
+
+        transformed_data = [
+            {("id" if k == "_id" else k): v for k, v in d.items()}
+            for d in response_json
+        ]
+        return AgentConfigurations(configurations=transformed_data)
 
     def get_agent_response(
-        self, user_input: str, chat_id: str, agent_type: str, stream: bool = False
+        self, user_input: str, chat_id: str, agent_id: str, stream: bool = False
     ) -> List[GetAgentResponse]:
         """Fetches the response from an agent based on the user input.
 
@@ -69,7 +82,7 @@ class AgentOperations:
             - user_input (str): The user's input to which the agent responds.
             - chat_id (str): The unique identifier for the chat session.
             - stream (bool): A flag indicating whether the response should be streamed.
-            - agent_type (str): The type of agent to use for generating the response.
+            - agent_id (str): The unique identifier of agent to use for generating the response.
 
         Raises:
             AgentServiceException: Raised if authentication fails (status code 401).
@@ -81,12 +94,12 @@ class AgentOperations:
         """
         url = f"{self.base_url}/{self.endpoints.GET_AGENT_RESPONSE}"
         get_agent_request_body = GetAgentRequest(
-            user_input=user_input, chat_id=chat_id, stream=stream, agent_type=agent_type
+            user_input=user_input, chat_id=chat_id, stream=stream, agent_id=agent_id
         )
         response = requests.post(
             url=url,
             json=get_agent_request_body.model_dump(),
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise AgentServiceException(
@@ -132,28 +145,33 @@ class AgentOperations:
                 resp.append(event)
         return resp
 
-    def get_chat_history(self, chat_id: str) -> ChatHistoryResponse:
-        """Fetches the chat history for a specific chat session.
-
-        This method retrieves the entire chat history for the given `chat_id`.
+    def get_agent(self, agent_id: str) -> AgentConfiguration:
+        """
+        Fetches the configuration details for a specified agent from the API.
 
         Args:
-            chat_id (str): The unique identifier of the chat session for which the history
-                is being retrieved.
-
-        Raises:
-            AgentServiceException: Raised if authentication fails (status code 401).
-            AgentServiceException: Raised if any other error occurs while fetching the chat history.
+            agent_id (str): The unique identifier for the agent to retrieve its configuration details.
 
         Returns:
-            ChatHistoryResponse: A response object containing a list of messages for the chat session.
+            AgentConfiguration: An instance of `AgentConfiguration` populated with data from the API response.
+
+        Raises:
+            AgentServiceException: Raised if the request fails with a 401 (Unauthorized),
+                404 (Not Found), or other non-200 status codes. Specific error cases include:
+                - Authentication failure if the status code is 401, with the message defined in `AUTHENTICATION_FAILED_MESSAGE`.
+                - "Failed to find agent with ID {agent_id}" if the agent ID is not found (404).
+                - "Failed to get agent history" for any other unexpected error codes.
+
+        Notes:
+            - If the request succeeds, the response's first item (assumed to contain the agent data) is transformed by renaming
+            `_id` to `id` to fit the `AgentConfiguration` model requirements.
+            - The method expects the response data to contain a list where the first item holds the agent configuration data.
         """
-        url = (
-            f"{self.base_url}/{self.endpoints.GET_CHAT_HISTORY.format(CHAT_ID=chat_id)}"
-        )
+
+        url = f"{self.base_url}/{self.endpoints.GET_AGENT.format(AGENT_ID=agent_id)}"
         response = requests.get(
             url=url,
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
+            headers={"Authorization": f"Bearer {self.config.auth_token._secret_value}"},
         )
         if response.status_code == 401:
             raise AgentServiceException(
@@ -161,52 +179,18 @@ class AgentOperations:
                 message=AUTHENTICATION_FAILED_MESSAGE,
                 response_data=response.json(),
             )
-        elif response.status_code != 200:
+        elif response.status_code == 404:
             raise AgentServiceException(
                 status_code=response.status_code,
-                message="Failed to get chat history",
-                response_data=response.json(),
-            )
-        return ChatHistoryResponse(**response.json())
-
-    def delete_chat_history(self, chat_id: str) -> str:
-        """Deletes the chat history for a specific chat session.
-
-        This method sends a request to delete the chat history for the given `chat_id`.
-
-        Args:
-            chat_id (str): The unique identifier of the chat session to be deleted.
-
-        Raises:
-            AgentServiceException: Raised if authentication fails (status code 401).
-            AgentServiceException: Raised if form validation fails (status code 422).
-            AgentServiceException: Raised if any other error occurs while deleting the chat history.
-
-        Returns:
-            str: A string message indicating the success of the operation.
-        """
-        url = f"{self.base_url}/{self.endpoints.DELETE_CHAT_HISTORY}"
-        response = requests.delete(
-            url=url,
-            json={"chat_id": chat_id},
-            headers={"Authorization": f"Bearer {self.config.auth_token}"},
-        )
-        if response.status_code == 401:
-            raise AgentServiceException(
-                status_code=response.status_code,
-                message=AUTHENTICATION_FAILED_MESSAGE,
-                response_data=response.json(),
-            )
-        elif response.status_code == 422:
-            raise AgentServiceException(
-                status_code=response.status_code,
-                message=VALIDATION_FAILED_MESSAGE,
+                message=f"Failed to find agent with ID {agent_id}",
                 response_data=response.json(),
             )
         elif response.status_code != 200:
             raise AgentServiceException(
                 status_code=response.status_code,
-                message="Failed to get chat history",
+                message="Failed to get agent history",
                 response_data=response.json(),
             )
-        return "Success"
+        response_json = response.json()[0]
+        response_json["id"] = response_json.pop("_id")
+        return AgentConfiguration.model_validate(response_json)
