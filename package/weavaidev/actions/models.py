@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,3 +14,8 @@ class Action(BaseModel):
     folder_name_keywords: List[str] = Field(default_factory=list)
     folder_ids: List[str] = Field(default_factory=list)
     enable_context_relevancy_filtering: bool = True
+
+
+class ActionTypes(BaseModel):
+    type: str
+    json_schema: Dict[str, Any]

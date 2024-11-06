@@ -1,7 +1,7 @@
 import requests
 from weavaidev import Config
 from weavaidev.actions.exceptions import ActionOperationsException
-from weavaidev.actions.models import Action
+from weavaidev.actions.models import Action, ActionTypes
 from weavaidev.config_models import (
     AUTHENTICATION_FAILED_MESSAGE,
     ServiceEndpoints,
@@ -16,7 +16,7 @@ class ActionOperations:
         self.endpoints = ServiceEndpoints()
         self.base_url = get_base_url(config=config, service=ServiceType.AGENT)
 
-    def get_action_types(self):
+    def get_action_types(self) -> ActionTypes:
         """
         Retrieves the available action types from the configured API endpoint.
 
@@ -54,7 +54,9 @@ class ActionOperations:
                 message="Failed to get actions",
                 response_data=response.json(),
             )
-        return response.json()
+        return [
+            ActionTypes.model_validate(action_type) for action_type in response.json()
+        ]
 
     def get_action_type_configuration(self, action_type: str) -> Action:
         """
