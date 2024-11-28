@@ -1,0 +1,36 @@
+repos:
+-   repo: https://github.com/asottile/seed-isort-config
+    rev: v2.2.0
+    hooks:
+    - id: seed-isort-config
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+    - id: isort
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0  # Use the ref you want to point at
+    hooks:
+    - id: trailing-whitespace
+    - id: check-case-conflict
+    - id: check-added-large-files
+      exclude: resources/9b5ad71b2ce5302211f9c61530b329a4922fc6a4
+    - id: check-merge-conflict
+
+-   repo: https://github.com/ambv/black
+    rev: 22.3.0
+    hooks:
+    - id: black
+-   repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+    - id: flake8
+      args: [
+          --max-line-length=89,
+          --max-complexity=18,
+          --extend-ignore=E203,
+          --extend-ignore=E501
+          ]
+      additional_dependencies: [
+          pep8-naming,
+          flake8-print
+      ]

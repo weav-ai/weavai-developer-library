@@ -1,6 +1,6 @@
-## Setup
+## Setup 
 
-### Create a new virtual environment with Python3 3.11+
+### Create a new virtual environment
 
 ```
 python3 -m venv myenv
@@ -24,7 +24,7 @@ pip3 install .
 ```
 
 ### Option 2: Building the wheel distribution
-### Run
+### Run 
 ```
 pip3 install -q build
 ```
@@ -41,4 +41,4 @@ pip3 install build dist/weavaidev-0.0.1-py3-none-any.whl
 
 
 ## The library is now installed in the virtual environment.
-### Play around with some sample examples that are provided in `examples` folder.
+### Play around with some sample examples that are provided in `examples` folder. 
