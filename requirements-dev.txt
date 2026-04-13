@@ -3,7 +3,7 @@ isort
 black
 flake8-print
 pur
-pytest==8.2.2
+pytest==9.0.3
 pytest_mock==3.14.0
 pytest-env==1.1.3
 mongomock
